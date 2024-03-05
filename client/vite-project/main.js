@@ -30,7 +30,7 @@ sendBtn.addEventListener('click', () => {
 });
 
 socket.on('chat', (arg) => {
-  console.log('main.js - socket', arg);
+  console.log('main.js - socket', arg.sender);
   const message = {
     ...arg,
     sender: arg.sender,
@@ -43,7 +43,7 @@ socket.on('chat', (arg) => {
 
 function updateChat(chat, sender) {
   let li = document.createElement('li');
-  li.innerText = chat;
+  li.innerText = chat.content;
   let div = document.createElement('div');
   let name = document.createElement('p');
 
@@ -55,6 +55,7 @@ function updateChat(chat, sender) {
   } else {
     li.classList.add('received');
     div.classList.add('received-container');
+    name.innerText = chat.sender;
   }
   div.appendChild(li);
   div.appendChild(name);
