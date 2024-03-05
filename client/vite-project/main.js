@@ -43,7 +43,7 @@ socket.on('chat', (arg) => {
 
 function updateChat(chat, sender) {
   let li = document.createElement('li');
-  li.innerText = chat.content;
+  li.innerText = chat;
   let div = document.createElement('div');
   let name = document.createElement('p');
 
@@ -55,7 +55,7 @@ function updateChat(chat, sender) {
   } else {
     li.classList.add('received');
     div.classList.add('received-container');
-    name.innerText = chat.sender;
+    name.innerText = sender;
   }
   div.appendChild(li);
   div.appendChild(name);
