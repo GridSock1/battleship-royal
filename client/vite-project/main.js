@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-const socket = io('http://orca-app-rblx6.ondigitalocean.app');
+const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
 
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
