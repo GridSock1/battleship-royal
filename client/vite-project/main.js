@@ -25,21 +25,30 @@ sendBtn.addEventListener('click', () => {
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject.message); //skickar meddelande
-  updateChat(sendMessage.value, 'sent');
+  updateChat(sendMessage.value, myName, 'sent');
   sendMessage.value = '';
 });
 
-socket.on('chat', (arg, sender) => {
+/* socket.on('chat', (messageObject) => {
+  console.log('main.js - socket', messageObject);
+  updateChat(messageObject.message, messageObject.sender, 'received'); // inkludera avsändarens namn när du uppdaterar chatten
+}); */
+
+socket.on('chat', (arg) => {
   console.log('main.js - socket', arg.sender);
   // const message = {
   //   ...arg,
   //   sender: arg.sender,
   // };
-  updateChat(arg, sender);
-  /* if (arg.sender !== myName) {
-    updateChat(arg, 'received');
-  } */
+  updateChat(arg, arg.sender, 'received');
+
 });
+
+
+/* socket.on('chat', (arg) => {
+  console.log('main.js - socket', arg);
+  updateChat(arg, 'received');
+}); */
 
 function updateChat(chat, sender) {
   let li = document.createElement('li');
@@ -56,7 +65,6 @@ function updateChat(chat, sender) {
     li.classList.add('received');
     div.classList.add('received-container');
     name.innerText = sender;
-    console.log(chat, sender);
   }
   div.appendChild(li);
   div.appendChild(name);
