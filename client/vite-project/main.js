@@ -29,13 +29,13 @@ sendBtn.addEventListener('click', () => {
   sendMessage.value = '';
 });
 
-socket.on('chat', (arg) => {
+socket.on('chat', (arg, sender) => {
   console.log('main.js - socket', arg.sender);
-  const message = {
-    ...arg,
-    sender: arg.sender,
-  };
-  updateChat(message, 'received');
+  // const message = {
+  //   ...arg,
+  //   sender: arg.sender,
+  // };
+  updateChat(arg, sender);
   /* if (arg.sender !== myName) {
     updateChat(arg, 'received');
   } */
@@ -56,6 +56,7 @@ function updateChat(chat, sender) {
     li.classList.add('received');
     div.classList.add('received-container');
     name.innerText = sender;
+    console.log(chat, sender);
   }
   div.appendChild(li);
   div.appendChild(name);
