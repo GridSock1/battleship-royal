@@ -18,10 +18,11 @@ io.on('connection', (socket) => {
     'Välkommen till chatten! Kom ihåg att alltid skriva snälla saker. :)'
   );
 
-  socket.on('chat', async (arg) => {
+  socket.on('chat', (arg) => {
     console.log('incoming chat', arg);
+    io.emit('chat', arg);
 
-    try {
+    /* try {
       const newMessage = new Message({ content: arg.message });
 
       await newMessage.save();
@@ -29,7 +30,7 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('chat', arg);
     } catch (error) {
       console.error('Error saving message:', error);
-    }
+    } */
   });
 });
 

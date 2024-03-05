@@ -31,9 +31,10 @@ sendBtn.addEventListener('click', () => {
 
 socket.on('chat', (arg) => {
   console.log('main.js - socket', arg);
-  if (arg.sender !== myName) {
+  updateChat(arg, 'received');
+  /* if (arg.sender !== myName) {
     updateChat(arg, 'received');
-  }
+  } */
 });
 
 function updateChat(chat, sender) {
