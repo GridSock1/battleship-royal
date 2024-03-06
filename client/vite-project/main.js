@@ -24,7 +24,7 @@ sendBtn.addEventListener('click', () => {
   let messageObject = { message: sendMessage.value, sender: myName };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
-  socket.emit('chat', messageObject.message); //skickar meddelande
+  socket.emit('chat', messageObject); //skickar meddelande
   updateChat(sendMessage.value, 'sent');
   sendMessage.value = '';
 });
@@ -35,15 +35,13 @@ sendBtn.addEventListener('click', () => {
 }); */
 
 socket.on('chat', (arg, sender) => {
-  console.log('main.js - socket', arg.sender);
+  console.log('main.js - socket', arg);
   // const message = {
   //   ...arg,
   //   sender: arg.sender,
   // };
   updateChat(arg, sender, 'received');
-
 });
-
 
 /* socket.on('chat', (arg) => {
   console.log('main.js - socket', arg);

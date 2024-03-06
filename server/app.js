@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
 
   socket.on('chat', (arg) => {
     console.log('incoming chat', arg);
-    socket.broadcast.emit('chat', arg);
+    socket.broadcast.emit('chat', arg.message, arg.sender, 'recieved');
 
     /* try {
       const newMessage = new Message({ content: arg.message });
