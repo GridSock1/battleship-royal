@@ -8,6 +8,8 @@ const io = require('socket.io')(server, {
   },
 });
 
+const botName = "QuackBot";
+
 app.get('/test', (req, res) => {
   res.send('<h1>Socket</h1>');
 });
@@ -15,7 +17,7 @@ app.get('/test', (req, res) => {
 io.on('connection', (socket) => {
   socket.emit(
     'chat',
-    'Välkommen till chatten! Kom ihåg att alltid skriva snälla saker. :)'
+    'Välkommen till chatten! Kom ihåg att alltid skriva snälla saker. :)', botName
   );
 
   socket.on('chat', (arg) => {
