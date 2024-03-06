@@ -1,7 +1,6 @@
-
-
 .battle-page {
-    width: 100vw; 
+    display: flex;
+    justify-content: flex-end;
+    min-height: 100vh;   
     border: 2px solid orange; 
-    background-color: blue;
 }
