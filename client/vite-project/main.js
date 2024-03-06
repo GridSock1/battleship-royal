@@ -49,14 +49,14 @@ socket.on('chat', (arg, sender) => {
   updateChat(arg, 'received');
 }); */
 
-function updateChat(chat, sender) {
+function updateChat(chat, sender, messageType) {
   let li = document.createElement('li');
   li.innerText = chat;
   let div = document.createElement('div');
   let name = document.createElement('p');
 
   //div.classList.add('li-container')
-  if (sender === 'sent') {
+  if (messageType === 'sent') {
     li.classList.add('sent');
     div.classList.add('sent-container');
     name.innerText = myName;
