@@ -12,7 +12,8 @@ let myName = localStorage.getItem('user');
 const nameInput = document.getElementById('nameInput');
 const joinBtn = document.getElementById('joinBtn');
 
-joinBtn.addEventListener('click', () => {
+joinBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   localStorage.getItem('user');
   let user = nameInput.value;
   localStorage.setItem('user', user);
