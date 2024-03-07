@@ -1,5 +1,9 @@
 import { io } from 'socket.io-client';
+<<<<<<< Updated upstream
 const socket = io('http://localhost:8080');
+=======
+const socket = io('http://localhost:3031');
+>>>>>>> Stashed changes
 
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
@@ -26,7 +30,7 @@ sendBtn.addEventListener('click', () => {
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject); //skickar meddelande
-  updateChat(sendMessage.value, 'sent');
+  updateChat(sendMessage.value, 'sent', myName);
   sendMessage.value = '';
 });
 
