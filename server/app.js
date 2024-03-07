@@ -42,8 +42,7 @@ io.on('connection', (socket) => {
 
   socket.on('chat', (arg) => {
     console.log('incoming chat', arg);
-    socket.broadcast.emit('chat', arg.message, arg.sender);
-    console.log('FUNKAR DET HÄR', arg.sender);
+    socket.broadcast.emit('chat', arg.message, arg.sender, arg.color);
 
     /* try {
       const newMessage = new Message({ content: arg.message });
@@ -57,4 +56,4 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(process.env.PORT || '3031');
+server.listen(process.env.PORT || '8080');
