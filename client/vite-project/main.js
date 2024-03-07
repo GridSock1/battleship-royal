@@ -1,5 +1,6 @@
 import { io } from 'socket.io-client';
 const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+import './game/game.js';
 
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
