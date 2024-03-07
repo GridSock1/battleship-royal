@@ -1,36 +1,80 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="main.js"></script>
-    <title>BattleShip Royal</title>
-  </head> 
- 
-  <body>    
-    <div class="join-container">
-      <form class="login-form" id="loginForm">
-        <input id="nameInput" class="inputfield name-input" type="text" placeholder="Ditt namn">
-        <button id="joinBtn" class="join-btn btn">Spela</button>
-      </form>
-    </div> 
 
-    <main class="battle-page">
-      <div class="chat-container">       
-        <div id="chatBox" class="chat-box">
-          <ul class="chat-list" id="chatList"></ul>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="module" src="main.js"></script>
+  <title>BattleShip Royal</title>
+</head>
 
-        <div class="send-message-container">
-          <input type="text" id="sendMessage" class="input-field" placeholder="Nytt chattmeddelande">
-          <button id="sendBtn" class="send-btn btn">Skicka</button>
-        </div>
+<body>
 
+  <div class="join-container">
+    <form class="login-form" id="loginForm">
+      <input id="nameInput" class="inputfield name-input" type="text" placeholder="Ditt namn">
+      <button id="joinBtn" class="join-btn btn">Spela</button>
+    </form>
+  </div>
+
+  <main class="battle-page">
+
+    <div class="container">
+      <div class="grid grid-user"></div>
+    </div>
+
+    <div class="grid-display" id="gridDisplay">
+      <div class="ship rowboat-container">
+        <div id="rowboat-0"></div>
+        <div id="rowboat-1"></div>
       </div>
-    </main>
-    
-  </body>
-  
+      <div class="ship sailboat-container">
+        <div id="sailboat-0"></div>
+        <div id="sailboat-1"></div>
+        <div id="sailboat-2"></div>
+      </div>
+      <div class="ship fishingboat-container">
+        <div id="fishingboat-0"></div>
+        <div id="fishingboat-1"></div>
+        <div id="fishingboat-2"></div>
+      </div>
+      <div class="ship pirateship-container">
+        <div id="pirateship-0"></div>
+        <div id="pirateship-1"></div>
+        <div id="pirateship-2"></div>
+        <div id="pirateship-3"></div>
+      </div>
+      <div class="ship oiltanker-container">
+        <div id="oiltanker-0"></div>
+        <div id="oiltanker-1"></div>
+        <div id="oiltanker-2"></div>
+        <div id="oiltanker-3"></div>
+        <div id="oiltanker-4"></div>
+      </div>
+      <div class="ship rubberduck-container">
+        <div id="rubberduck-0"></div>
+      </div>
+      <div class="ship grandpakid-container">
+        <div id="grandpakid-0"></div>
+      </div>
+    </div>
+    </div>
+
+    <div class="chat-container">
+      <div id="chatBox" class="chat-box">
+        <ul class="chat-list" id="chatList"></ul>
+      </div>
+
+      <div class="send-message-container">
+        <input type="text" id="sendMessage" class="input-field" placeholder="Nytt chattmeddelande">
+        <button id="sendBtn" class="send-btn btn">Skicka</button>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+
 </html>
