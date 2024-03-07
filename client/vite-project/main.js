@@ -1,5 +1,9 @@
 import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+//const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+const socket = io('http://localhost:3031');
+
+//const joinContainer = document.getElementById('joinContainer'); 
+const usersList = document.getElementById('usersList');
 
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
@@ -12,13 +16,35 @@ let myName = localStorage.getItem('user');
 const nameInput = document.getElementById('nameInput');
 const joinBtn = document.getElementById('joinBtn');
 
-joinBtn.addEventListener('submit', (e) => {
+joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
   localStorage.getItem('user');
   let user = nameInput.value;
-  localStorage.setItem('user', user);
+  localStorage.setItem('user', user);  
   nameInput.value = '';
+  
 });
+//=================================================
+//==============   PLAYERS LIST   =================
+//=================================================
+socket.on('connect', (user) => {
+  let user = localStorage.getItem('user');
+  let listItem = document.createElement('li');
+  listItem.textContent = user; 
+  usersList.appendChild(listItem);
+})
+
+socket.on('disconnect', () => {
+  let user = localStorage.getItem('user');
+  let listItems = usersList.getElementsByTagName('li');
+
+  for (let i = 0; i < listItems.length; i++) {
+    if (listItems[i].textContent === user) {
+      listItems[i].remove(); 
+      break;
+    }
+  }
+})
 
 //=================================================
 sendBtn.addEventListener('click', () => {
