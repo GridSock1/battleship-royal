@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+const socket = io('http://localhost:8080');
 
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
@@ -12,7 +12,7 @@ let myName = localStorage.getItem('user');
 const nameInput = document.getElementById('nameInput');
 const joinBtn = document.getElementById('joinBtn');
 
-joinBtn.addEventListener('submit', (e) => {
+joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
   localStorage.getItem('user');
   let user = nameInput.value;
