@@ -18,7 +18,7 @@ let myColor = localStorage.getItem('userColor');
 const nameInput = document.getElementById('nameInput');
 const joinBtn = document.getElementById('joinBtn');
 
-joinBtn.addEventListener('submit', (e) => {
+joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
   let user = nameInput.value;
   localStorage.setItem('user', user);
@@ -32,10 +32,14 @@ joinBtn.addEventListener('submit', (e) => {
 //=================================================
 //==============   PLAYERS LIST   =================
 //=================================================
-socket.on('connect', (user) => {
+socket.on('connect', () => {
   let user = localStorage.getItem('user');
+  let userColor = localStorage.getItem('userColor');
+
   let listItem = document.createElement('li');
+  listItem.classList.add('username');
   listItem.textContent = user; 
+  listItem.style.backgroundColor = userColor; 
   usersList.appendChild(listItem);
 })
 
@@ -53,7 +57,7 @@ socket.on('disconnect', () => {
 
 //=================================================
 sendBtn.addEventListener('click', () => {
-  let messageObject = { message: sendMessage.value, sender: myName };
+  let messageObject = { message: sendMessage.value, sender: myName, color: myColor };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject); //skickar meddelande
