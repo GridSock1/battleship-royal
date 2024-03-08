@@ -1,5 +1,7 @@
 import { io } from 'socket.io-client';
-const socket = io('http://localhost:3031');
+import getRandomColor from './modules/randomColor.mjs';
+import './game/game.js';
+const socket = io('http://localhost:3032');
 
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
