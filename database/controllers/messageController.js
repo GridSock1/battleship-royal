@@ -3,7 +3,7 @@ const Message = require('../models/messageModel.js');
 
 const { connected } = require('../../server/app.js');
 
-const sendMessage = expressAsyncHandler(async (req, res) => {
+const sendMessage = expressAsyncHandler((req, res) => {
   if (!connected) {
     return res
       .status(500)
@@ -14,9 +14,10 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
   try {
     const newMsg = new Message({
       content: content,
+      userName: userName,
     });
 
-    await newMsg.save();
+    newMsg.save();
 
     console.log(newMsg);
 
@@ -25,7 +26,7 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'Failed to save chat session', error: error.message });
+      .json({ message: 'Failed to save message', error: error.message });
   }
 });
 

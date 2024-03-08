@@ -7,6 +7,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const messageRoutes = require('./routes/messageRoutes');
+const playerRoutes = require('./routes/messageRoutes.js');
+// const sessionRoutes = require('./routes/sessionRoutes.js');
 const mongoose = require('mongoose');
 
 dotenv.config();
@@ -16,7 +18,7 @@ mongoose
     'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_test_db?retryWrites=true&w=majority&appName=Cluster0'
   )
   .then(() => {
-    console.log('Connected to MongoDB from server');
+    console.log('Connected to MongoDB from database');
   })
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
@@ -27,6 +29,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use('/player', playerRoutes);
+// app.use('/session', sessionRoutes);
 app.use('/msg', messageRoutes);
 
 app.listen(PORT, () => {

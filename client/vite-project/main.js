@@ -4,9 +4,7 @@ import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 const socket = io('http://localhost:3032');
 
-
-
-//const joinContainer = document.getElementById('joinContainer'); 
+//const joinContainer = document.getElementById('joinContainer');
 const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
@@ -25,11 +23,10 @@ joinBtn.addEventListener('click', (e) => {
   let user = nameInput.value;
   localStorage.setItem('user', user);
 
-  let userColor = getRandomColor(); 
+  let userColor = getRandomColor();
   localStorage.setItem('userColor', userColor);
 
   nameInput.value = '';
-  
 });
 //=================================================
 //==============   PLAYERS LIST   =================
@@ -40,10 +37,10 @@ socket.on('connect', () => {
 
   let listItem = document.createElement('li');
   listItem.classList.add('username');
-  listItem.textContent = user; 
-  listItem.style.backgroundColor = userColor; 
+  listItem.textContent = user;
+  listItem.style.backgroundColor = userColor;
   usersList.appendChild(listItem);
-})
+});
 
 socket.on('disconnect', () => {
   let user = localStorage.getItem('user');
@@ -51,15 +48,19 @@ socket.on('disconnect', () => {
 
   for (let i = 0; i < listItems.length; i++) {
     if (listItems[i].textContent === user) {
-      listItems[i].remove(); 
+      listItems[i].remove();
       break;
     }
   }
-})
+});
 
 //=================================================
 sendBtn.addEventListener('click', () => {
-  let messageObject = { message: sendMessage.value, sender: myName, color: myColor };
+  let messageObject = {
+    message: sendMessage.value,
+    sender: myName,
+    color: myColor,
+  };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject); //skickar meddelande
@@ -83,12 +84,12 @@ function updateChat(chat, sender, color) {
     li.classList.add('sent');
     div.classList.add('sent-container');
     name.innerText = myName;
-    li.style.backgroundColor = myColor; 
+    li.style.backgroundColor = myColor;
   } else {
     li.classList.add('received');
     div.classList.add('received-container');
     name.innerText = sender;
-    li.style.backgroundColor = color; 
+    li.style.backgroundColor = color;
   }
   div.appendChild(li);
   div.appendChild(name);
