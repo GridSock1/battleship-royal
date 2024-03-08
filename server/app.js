@@ -8,30 +8,32 @@ const io = require('socket.io')(server, {
   },
 });
 
-const botName = "QuackBot";
-
-app.get('/test', (req, res) => {
+/* app.get('/test', (req, res) => {
   res.send('<h1>Socket</h1>');
-});
+}); */
 
-let activeUsers = [];
+
+const botName = "QuackBot";
+let playersList = [];
+
 
 io.on('connection', (socket) => {
     console.log('A user connected', socket.id);
 
     socket.on('login', (user) => {
-        activeUsers.push(user); // Lägg till användaren till listan över aktiva användare
+        playersList.push(user); 
+        console.log(playersList, 'player list, app');
         console.log(`${user} joined the server`);
-        io.emit('userConnected', user); // Skicka användarens namn till alla anslutna klienter
+        io.emit('usersConnected', playersList); 
       });
 
     socket.on('disconnect', () => {
         console.log('A user disconnected');
-    let index = activeUsers.indexOf(socket.user);
+    let index = playersList.indexOf(socket.user);
     if (index !== -1) {
-      let user = activeUsers.splice(index, 1)[0]; // Ta bort användaren från listan över aktiva användare
+      let user = playersList.splice(index, 1)[0]; 
       console.log(`${user} left the server`);
-      io.emit('userDisconnected', user); // Skicka användarens namn till alla anslutna klienter
+      io.emit('userDisconnected', user); 
     }
   });
 
@@ -56,4 +58,4 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(process.env.PORT || '8080');
+server.listen(process.env.PORT || '3031');
