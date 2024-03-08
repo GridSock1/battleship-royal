@@ -3,6 +3,9 @@ const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 
+
+//const joinContainer = document.getElementById('joinContainer'); 
+const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
 let chatList = document.getElementById('chatList');
@@ -22,11 +25,38 @@ joinBtn.addEventListener('click', (e) => {
 
   let userColor = getRandomColor(); 
   localStorage.setItem('userColor', userColor);
-  
+
   nameInput.value = '';
+  
 });
 //=================================================
-sendBtn.addEventListener('click', () => {            //sidan behöver uppdateras för att namnet ska synas  !!!!
+//==============   PLAYERS LIST   =================
+//=================================================
+socket.on('connect', () => {
+  let user = localStorage.getItem('user');
+  let userColor = localStorage.getItem('userColor');
+
+  let listItem = document.createElement('li');
+  listItem.classList.add('username');
+  listItem.textContent = user; 
+  listItem.style.backgroundColor = userColor; 
+  usersList.appendChild(listItem);
+})
+
+socket.on('disconnect', () => {
+  let user = localStorage.getItem('user');
+  let listItems = usersList.getElementsByTagName('li');
+
+  for (let i = 0; i < listItems.length; i++) {
+    if (listItems[i].textContent === user) {
+      listItems[i].remove(); 
+      break;
+    }
+  }
+})
+
+//=================================================
+sendBtn.addEventListener('click', () => {
   let messageObject = { message: sendMessage.value, sender: myName, color: myColor };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
