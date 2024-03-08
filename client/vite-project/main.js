@@ -1,12 +1,18 @@
 import { io } from 'socket.io-client';
+
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 const socket = io('http://localhost:3032');
 
+
+
+//const joinContainer = document.getElementById('joinContainer'); 
+const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
 let chatList = document.getElementById('chatList');
 let myName = localStorage.getItem('user');
+let myColor = localStorage.getItem('userColor');
 
 //================================================
 //==================   LOG IN   ==================
@@ -16,15 +22,44 @@ const joinBtn = document.getElementById('joinBtn');
 
 joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  localStorage.getItem('user');
   let user = nameInput.value;
   localStorage.setItem('user', user);
+
+  let userColor = getRandomColor(); 
+  localStorage.setItem('userColor', userColor);
+
   nameInput.value = '';
+  
 });
+//=================================================
+//==============   PLAYERS LIST   =================
+//=================================================
+socket.on('connect', () => {
+  let user = localStorage.getItem('user');
+  let userColor = localStorage.getItem('userColor');
+
+  let listItem = document.createElement('li');
+  listItem.classList.add('username');
+  listItem.textContent = user; 
+  listItem.style.backgroundColor = userColor; 
+  usersList.appendChild(listItem);
+})
+
+socket.on('disconnect', () => {
+  let user = localStorage.getItem('user');
+  let listItems = usersList.getElementsByTagName('li');
+
+  for (let i = 0; i < listItems.length; i++) {
+    if (listItems[i].textContent === user) {
+      listItems[i].remove(); 
+      break;
+    }
+  }
+})
 
 //=================================================
 sendBtn.addEventListener('click', () => {
-  let messageObject = { message: sendMessage.value, sender: myName };
+  let messageObject = { message: sendMessage.value, sender: myName, color: myColor };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject); //skickar meddelande
@@ -32,26 +67,12 @@ sendBtn.addEventListener('click', () => {
   sendMessage.value = '';
 });
 
-/* socket.on('chat', (messageObject) => {
-  console.log('main.js - socket', messageObject);
-  updateChat(messageObject.message, messageObject.sender, 'received'); // inkludera avsändarens namn när du uppdaterar chatten
-}); */
-
-socket.on('chat', (arg, sender) => {
+socket.on('chat', (arg, sender, color) => {
   console.log('main.js - socket', arg);
-  // const message = {
-  //   ...arg,
-  //   sender: arg.sender,
-  // };
-  updateChat(arg, sender, 'received');
+  updateChat(arg, sender, color, 'received');
 });
 
-/* socket.on('chat', (arg) => {
-  console.log('main.js - socket', arg);
-  updateChat(arg, 'received');
-}); */
-
-function updateChat(chat, sender) {
+function updateChat(chat, sender, color) {
   let li = document.createElement('li');
   li.innerText = chat;
   let div = document.createElement('div');
@@ -62,10 +83,12 @@ function updateChat(chat, sender) {
     li.classList.add('sent');
     div.classList.add('sent-container');
     name.innerText = myName;
+    li.style.backgroundColor = myColor; 
   } else {
     li.classList.add('received');
     div.classList.add('received-container');
     name.innerText = sender;
+    li.style.backgroundColor = color; 
   }
   div.appendChild(li);
   div.appendChild(name);
