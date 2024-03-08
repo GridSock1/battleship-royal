@@ -1,5 +1,10 @@
 const app = require('express')();
 const server = require('http').createServer(app);
+const mongoose = require('mongoose');
+const cors = require('cors');
+const PORT = 3032;
+
+app.use(cors());
 
 const io = require('socket.io')(server, {
   cors: {
@@ -8,7 +13,22 @@ const io = require('socket.io')(server, {
   },
 });
 
+
 const botName = "QuackBot";
+
+const Message = require('../database/models/messageModel.js');
+
+mongoose
+  .connect(
+    'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_test_server?retryWrites=true&w=majority&appName=Cluster0'
+  )
+  .then(() => {
+    console.log('Connected to MongoDB from server');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
+
 
 app.get('/test', (req, res) => {
   res.send('<h1>Socket</h1>');
@@ -40,20 +60,28 @@ io.on('connection', (socket) => {
     'Välkommen till chatten! Kom ihåg att alltid skriva snälla saker. :)', botName
   );
 
-  socket.on('chat', (arg) => {
+  socket.on('chat', async (arg) => {
     console.log('incoming chat', arg);
+
     socket.broadcast.emit('chat', arg.message, arg.sender, arg.color);
 
-    /* try {
-      const newMessage = new Message({ content: arg.message });
+
+    try {
+      const newMessage = new Message({
+        content: arg.message,
+      });
 
       await newMessage.save();
+      console.log('Message saved to the database:', newMessage);
       io.emit('chat', arg);
-      socket.broadcast.emit('chat', arg);
+
+      socket.broadcast.emit('chat', arg.message, arg.sender);
     } catch (error) {
-      console.error('Error saving message:', error);
-    } */
+      console.error('Error saving chat message:', error);
+    }
   });
 });
 
-server.listen(process.env.PORT || '8080');
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
