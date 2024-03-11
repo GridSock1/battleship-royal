@@ -15,6 +15,19 @@ const io = require('socket.io')(server, {
 
 const { userJoin, currentUser, userLeave } = require('./users.js');
 
+const Message = require('../database/models/messageModel.js');
+
+mongoose
+  .connect(
+    'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_test_server?retryWrites=true&w=majority&appName=Cluster0'
+  )
+  .then(() => {
+    console.log('Connected to MongoDB from server');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
+
 /* app.get('/test', (req, res) => {
   res.send('<h1>Socket</h1>');
 }); */
