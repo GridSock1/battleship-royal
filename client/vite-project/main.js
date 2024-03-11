@@ -10,8 +10,8 @@ const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
 let chatList = document.getElementById('chatList');
-let myName = localStorage.getItem('user');
-let myColor = localStorage.getItem('userColor');
+let myName = localStorage.getItem('username');
+let myColor = getRandomColor();
 
 //================================================
 //==================   LOG IN   ==================
@@ -22,17 +22,18 @@ const joinBtn = document.getElementById('joinBtn');
 joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
   addPlayer(); 
-  let userColor = getRandomColor(); 
-  localStorage.setItem('userColor', userColor);
+  //let userColor = getRandomColor(); 
+  //localStorage.setItem('userColor', userColor);
 
   nameInput.value = '';
   
 });
 
 function addPlayer() {
-  let user = nameInput.value;
-  localStorage.setItem('user', user);
-  socket.emit('login', user);
+  let username = nameInput.value;
+  let color = myColor; 
+  localStorage.setItem('username', username);
+  socket.emit('login', { username, color });
 
   socket.on('usersConnected', (playersList) => {
     usersList.innerHTML = '';
@@ -40,8 +41,8 @@ function addPlayer() {
     playersList.forEach(player => {
         let listItem = document.createElement('li');
         listItem.classList.add('username');
-        listItem.textContent = player;
-        listItem.style.backgroundColor = myColor; 
+        listItem.textContent = player.username;
+        listItem.style.backgroundColor = player.color; 
         usersList.appendChild(listItem);
   });
 }) 
@@ -62,16 +63,15 @@ function addPlayer() {
   usersList.appendChild(listItem);
 })  */
 
-
 socket.on('disconnect', () => {
-  let user = localStorage.getItem('user');
+  let username = localStorage.getItem('username');
  
-  const index = playersList.indexOf(user);
+  const index = playersList.indexOf(username);
   if (index !== -1) {
       playersList.splice(index, 1); 
       io.emit('usersConnected', playersList); 
   }
-})
+})  
 //=================================================
 //==========   ATTACKING BATTLEGROUND   ===========
 //=================================================
