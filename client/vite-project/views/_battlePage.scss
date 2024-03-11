@@ -33,16 +33,15 @@
     .rowboat-container {
       width: 80px;
       height: 40px;
-      background-color: pink;
+      //background-color: pink;
       margin: 10px;
       display: flex;
       border-radius: 25px;
     }
-
     .rowboat-container-vertical {
       width: 40px;
       height: 80px;
-      background-color: pink;
+     // background-color: rgb(164, 119, 60);
       margin: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -52,7 +51,26 @@
     .sailboat-container {
       width: 120px;
       height: 40px;
-      background-color: purple;
+     // background-color: pink;
+      margin: 10px;
+      display: flex;
+      border-radius: 25px;
+    }
+
+    .rowboat-container-vertical {
+      width: 40px;
+      height: 80px;
+   //   background-color: pink;
+      margin: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      border-radius: 25px;
+    }
+
+    .sailboat-container {
+      width: 120px;
+      height: 40px;
+    //  background-color: purple;
       margin: 10px;
       display: flex;
       border-radius: 25px;
@@ -61,7 +79,7 @@
     .sailboat-container-vertical {
       width: 40px;
       height: 120px;
-      background-color: purple;
+    //  background-color: purple;
       margin: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -71,7 +89,7 @@
     .fishingboat-container {
       width: 160px;
       height: 40px;
-      background-color: blue;
+    //  background-color: blue;
       margin: 10px;
       display: flex;
       border-radius: 25px;
@@ -80,7 +98,7 @@
     .fishingboat-container-vertical {
       width: 40px;
       height: 160px;
-      background-color: blue;
+    //  background-color: blue;
       margin: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -90,7 +108,7 @@
     .pirateship-container {
       width: 200px;
       height: 40px;
-      background-color: green;
+     // background-color: green;
       margin: 10px;
       display: flex;
       border-radius: 25px;
@@ -99,7 +117,7 @@
     .pirateship-container-vertical {
       width: 40px;
       height: 200px;
-      background-color: green;
+    //  background-color: green;
       margin: 10px;
       display: flex;
       flex-wrap: wrap;
