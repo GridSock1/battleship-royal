@@ -23,16 +23,16 @@
 .join-container .login-form .new-user-btn {
   margin-top: 10px;
   font-size: 14px;
-  color: gray;
+  color: grey;
   width: 300px;
   height: 35px;
-  background-color: #fff;
+  background-color: white;
   border: none;
   cursor: pointer;
 }
 .join-container .login-form .new-user-btn:hover {
   text-decoration: underline;
-  color: #000;
+  color: black;
 }
 .join-container .username {
   font-family: Arial, Helvetica, sans-serif;
@@ -42,6 +42,7 @@
   padding-bottom: 2px;
   border-radius: 10px;
 }
+
 .battle-page {
   display: flex;
   justify-content: flex-end;
@@ -52,29 +53,29 @@
   display: flex;
 }
 .battle-page .container .grid-user {
-  width: 420px;
-  height: 420px;
+  width: 880px;
+  height: 880px;
   display: flex;
   flex-wrap: wrap;
-  background-color: #08f;
+  background-color: rgb(0, 136, 255);
   margin: 20px;
 }
 .battle-page .container .grid-user .grid,
 .battle-page .container .grid-user div {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   border: 1px solid;
 }
 .battle-page .grid-display {
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   margin: 20px;
-  background-color: #45e6e6;
+  background-color: rgb(69, 230, 230);
 }
 .battle-page .grid-display .rowboat-container {
   width: 80px;
   height: 40px;
-  background-color: #a4773c;
+  background-color: rgb(164, 119, 60);
   margin: 10px;
   display: flex;
   border-radius: 25px;
@@ -82,7 +83,7 @@
 .battle-page .grid-display .rowboat-container-vertical {
   width: 40px;
   height: 80px;
-  background-color: #a4773c;
+  background-color: rgb(164, 119, 60);
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -91,7 +92,7 @@
 .battle-page .grid-display .sailboat-container {
   width: 120px;
   height: 40px;
- // background-color: pink;
+  background-color: pink;
   margin: 10px;
   display: flex;
   border-radius: 25px;
@@ -99,7 +100,7 @@
 .battle-page .grid-display .sailboat-container-vertical {
   width: 40px;
   height: 120px;
- // background-color: pink;
+  background-color: pink;
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -108,7 +109,7 @@
 .battle-page .grid-display .fishingboat-container {
   width: 120px;
   height: 40px;
-//  background-color: purple;
+  background-color: purple;
   margin: 10px;
   display: flex;
   border-radius: 25px;
@@ -116,7 +117,7 @@
 .battle-page .grid-display .fishingboat-container-vertical {
   width: 40px;
   height: 120px;
- // background-color: purple;
+  background-color: purple;
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -125,7 +126,7 @@
 .battle-page .grid-display .pirateship-container {
   width: 160px;
   height: 40px;
- // background-color: blue;
+  background-color: blue;
   margin: 10px;
   display: flex;
   border-radius: 25px;
@@ -133,7 +134,7 @@
 .battle-page .grid-display .pirateship-container-vertical {
   width: 40px;
   height: 160px;
- // background-color: blue;
+  background-color: blue;
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -142,7 +143,7 @@
 .battle-page .grid-display .oiltanker-container {
   width: 200px;
   height: 40px;
- // background-color: green;
+  background-color: green;
   margin: 10px;
   display: flex;
   border-radius: 25px;
@@ -150,7 +151,7 @@
 .battle-page .grid-display .oiltanker-container-vertical {
   width: 40px;
   height: 200px;
-  // background-color: green;
+  background-color: green;
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -159,7 +160,7 @@
 .battle-page .grid-display .rubberduck-container {
   width: 40px;
   height: 40px;
-  background-color: #ff0;
+  background-color: yellow;
   margin: 10px;
   display: flex;
   border-radius: 50px;
@@ -176,6 +177,7 @@
   width: 40px;
   height: 40px;
 }
+
 .btn {
   width: 120px;
   height: 30px;
@@ -188,6 +190,7 @@
 .btn:hover {
   background-color: #b98adf;
 }
+
 .chat-container {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
@@ -203,7 +206,7 @@
   border: 2px solid #c4c4c4;
   border-radius: 10px;
   overflow-y: scroll;
-  background-color: #fff;
+  background-color: white;
 }
 .chat-container .chat-box .chat-list {
   display: flex;
@@ -236,7 +239,7 @@
   font-size: larger;
   color: #3a3a3a;
   border-radius: 15px;
-  background-color: #e7e7e7;
+  background-color: rgb(231, 231, 231);
   padding: 10px;
   flex-wrap: wrap;
   word-break: break-word;
@@ -255,9 +258,11 @@
 .chat-container .send-message-container .send-btn {
   height: 50px;
 }
+
 li {
   list-style: none;
 }
+
 .btn {
   width: 120px;
   height: 30px;
@@ -269,4 +274,4 @@ li {
 }
 .btn:hover {
   background-color: #b98adf;
-}
+}/*# sourceMappingURL=style.max.css.map */
