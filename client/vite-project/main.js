@@ -45,15 +45,14 @@ function addPlayer() {
   }) 
 }
 
-socket.on('disconnect', () => {
-  let username = localStorage.getItem('username');
- 
-  const index = playersList.indexOf(username);
-  if (index !== -1) {
-      playersList.splice(index, 1); 
-      io.emit('usersConnected', playersList); 
-  }
-})  
+socket.on('disconnect', (disconnectedUser) => {
+  let listItems = usersList.querySelectorAll('.username');
+  listItems.forEach(listItem => {
+      if (listItem.textContent === disconnectedUser.username) {
+          listItem.remove();
+      }
+  });
+});
 //=================================================
 //=============   BATTLESHIP COLOR   ==============
 //=================================================
