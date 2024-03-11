@@ -1,8 +1,10 @@
 import { io } from 'socket.io-client';
 const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
 // const socket = io('http://localhost:3031');
+
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
+// const socket = io('http://localhost:3032');
 
 const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
@@ -99,7 +101,7 @@ sendBtn.addEventListener('click', () => {
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject); //skickar meddelande
-  updateChat(sendMessage.value, 'sent');
+  updateChat(sendMessage.value, 'sent', myName);
   sendMessage.value = '';
 });
 

@@ -1,5 +1,10 @@
 const app = require('express')();
 const server = require('http').createServer(app);
+const mongoose = require('mongoose');
+const cors = require('cors');
+const PORT = 3032;
+
+app.use(cors());
 
 const io = require('socket.io')(server, {
   cors: {
@@ -8,69 +13,78 @@ const io = require('socket.io')(server, {
   },
 });
 
-const {
-    userJoin, 
-    currentUser, 
-    userLeave
-} = require('./users.js'); 
+const { userJoin, currentUser, userLeave } = require('./users.js');
+
+const Message = require('../database/models/messageModel.js');
+
+mongoose
+  .connect(
+    'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_test_server?retryWrites=true&w=majority&appName=Cluster0'
+  )
+  .then(() => {
+    console.log('Connected to MongoDB from server');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
 
 /* app.get('/test', (req, res) => {
   res.send('<h1>Socket</h1>');
 }); */
 
-
-const botName = "QuackBot";
+const botName = 'QuackBot';
 let playersList = [];
 
-
 io.on('connection', (socket) => {
-    console.log('A user connected', socket.id);
+  console.log('A user connected', socket.id);
 
-    socket.on('login', ({ username, color }) => { 
-        playersList.push({ username, id: socket.id, color }); 
-        console.log(playersList, 'player list, app');
-        console.log(`${username} joined the server`);
-        io.emit('usersConnected', playersList); 
-        
-        const user = userJoin(socket.id, username, color);
-        socket.join(user); 
-        console.log('user', user);
-    });
+  socket.on('login', ({ username, color }) => {
+    playersList.push({ username, id: socket.id, color });
+    console.log(playersList, 'player list, app');
+    console.log(`${username} joined the server`);
+    io.emit('usersConnected', playersList);
 
-    socket.on('disconnect', () => {
-        const disconnectedUser = playersList.find(user => user.id === socket.id);
-        
-        if (disconnectedUser) {
-            playersList = playersList.filter(user => user.id !== socket.id);
-            console.log(`${disconnectedUser.username} left the server`);
-            io.emit('userDisconnected', disconnectedUser); 
-            io.emit('usersConnected', playersList); 
-        }
-    });
+    const user = userJoin(socket.id, username, color);
+    socket.join(user);
+    console.log('user', user);
+  });
+
+  socket.on('disconnect', () => {
+    const disconnectedUser = playersList.find((user) => user.id === socket.id);
+
+    if (disconnectedUser) {
+      playersList = playersList.filter((user) => user.id !== socket.id);
+      console.log(`${disconnectedUser.username} left the server`);
+      io.emit('userDisconnected', disconnectedUser);
+      io.emit('usersConnected', playersList);
+    }
+  });
 
   socket.emit(
     'chat',
-    'Välkommen till chatten! Kom ihåg att alltid skriva snälla saker. :)', botName
+    'Välkommen till chatten! Kom ihåg att alltid skriva snälla saker. :)',
+    botName
   );
 
-  socket.on('chat', (arg) => {
+  socket.on('chat', async (arg) => {
     console.log('incoming chat', arg);
-    socket.broadcast.emit('chat', arg.message, arg.sender, arg.color);
 
-    socket.on('colorChange', (changeData) => {
-        io.emit('colorChanged', changeData);
+    try {
+      const newMessage = new Message({
+        content: arg.message,
+        userName: arg.sender,
+        userColor: arg.color,
       });
 
-    /* try {
-      const newMessage = new Message({ content: arg.message });
-
       await newMessage.save();
-      io.emit('chat', arg);
-      socket.broadcast.emit('chat', arg);
+      console.log('Message saved to the database:', newMessage);
+      // io.emit('chat', arg);
+
+      socket.broadcast.emit('chat', arg.message, arg.sender, arg.color);
     } catch (error) {
-      console.error('Error saving message:', error);
-    } */
+      console.error('Error saving chat message:', error);
+    }
   });
 });
 
-server.listen(process.env.PORT || '3031');
+server.listen(process.env.PORT || '3032');
