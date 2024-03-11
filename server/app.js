@@ -44,6 +44,7 @@ io.on('connection', (socket) => {
             playersList = playersList.filter(user => user.id !== socket.id);
             console.log(`${disconnectedUser.username} left the server`);
             io.emit('userDisconnected', disconnectedUser); 
+            io.emit('usersConnected', playersList); 
         }
     });
 
@@ -68,4 +69,4 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(process.env.PORT || '8080');
+server.listen(process.env.PORT || '3031');
