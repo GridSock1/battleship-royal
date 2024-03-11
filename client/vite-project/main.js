@@ -1,11 +1,9 @@
 import { io } from 'socket.io-client';
-//const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-const socket = io('http://localhost:3031');
+const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 
-
-//const joinContainer = document.getElementById('joinContainer'); 
 const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
@@ -22,11 +20,7 @@ const joinBtn = document.getElementById('joinBtn');
 joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
   addPlayer(); 
-  //let userColor = getRandomColor(); 
-  //localStorage.setItem('userColor', userColor);
-
-  nameInput.value = '';
-  
+  nameInput.value = '';  
 });
 
 function addPlayer() {
@@ -78,14 +72,13 @@ socket.on('disconnect', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   for (let i = 0; i < 100; i++) {
-      let div = document.querySelector(`[data-id="${i}"]`);
-      if (div) { // Kontrollera om div hittades innan du lägger till händelselyssnare
-          div.addEventListener('click', () => {
-            //  let userColor = localStorage.getItem('userColor');
-              div.style.backgroundColor = myColor; 
-              div.style.borderRadius = '50%';
-          }); 
-      }
+    let div = document.querySelector(`[data-id="${i}"]`);
+    if (div) { 
+      div.addEventListener('click', () => {
+        div.style.backgroundColor = myColor; 
+        div.style.borderRadius = '50%';
+      }); 
+    }
   }
 });
 
