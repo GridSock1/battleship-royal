@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-
+//const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+const socket = io('http://localhost:3031');
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 
@@ -23,6 +23,9 @@ joinBtn.addEventListener('click', (e) => {
   nameInput.value = '';  
 });
 
+//=================================================
+//==============   PLAYERS LIST   =================
+//=================================================
 function addPlayer() {
   let username = nameInput.value;
   let color = myColor; 
@@ -32,30 +35,15 @@ function addPlayer() {
   socket.on('usersConnected', (playersList) => {
     usersList.innerHTML = '';
 
-    playersList.forEach(player => {
-        let listItem = document.createElement('li');
-        listItem.classList.add('username');
-        listItem.textContent = player.username;
-        listItem.style.backgroundColor = player.color; 
-        usersList.appendChild(listItem);
-  });
-}) 
-
-
+    playersList.forEach(player => {     
+      let listItem = document.createElement('li');
+      listItem.classList.add('username');
+      listItem.textContent = player.username;
+      listItem.style.backgroundColor = player.color; 
+      usersList.appendChild(listItem);
+    });
+  }) 
 }
-//=================================================
-//==============   PLAYERS LIST   =================
-//=================================================
-/*  socket.on('connect', () => {
-  let user = localStorage.getItem('user');
-  let userColor = localStorage.getItem('userColor');
-
-  let listItem = document.createElement('li');
-  listItem.classList.add('username');
-  listItem.textContent = user; 
-  listItem.style.backgroundColor = userColor; 
-  usersList.appendChild(listItem);
-})  */
 
 socket.on('disconnect', () => {
   let username = localStorage.getItem('username');
@@ -67,9 +55,18 @@ socket.on('disconnect', () => {
   }
 })  
 //=================================================
+//=============   BATTLESHIP COLOR   ==============
+//=================================================
+let ships = document.querySelectorAll('.ship'); 
+
+ships.forEach(ship => {
+  ship.style.backgroundColor = myColor;  
+});
+
+
+//=================================================
 //==========   ATTACKING BATTLEGROUND   ===========
 //=================================================
-
 document.addEventListener('DOMContentLoaded', () => {
   for (let i = 0; i < 100; i++) {
     let div = document.querySelector(`[data-id="${i}"]`);
@@ -81,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 });
-
 
 //=================================================
 //================   CHAT ROOM   ==================
