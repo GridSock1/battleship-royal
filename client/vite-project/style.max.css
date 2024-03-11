@@ -1,0 +1,268 @@
+.join-container {
+  border: 2px solid blue;
+  height: auto;
+  display: flex;
+  justify-content: space-evenly;
+}
+.join-container .login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.join-container .login-form .inputfield {
+  height: 25px;
+  border-radius: 20px;
+  padding-left: 10px;
+  width: 290px;
+}
+.join-container .login-form .join-btn {
+  width: 300px;
+  height: 35px;
+  margin-top: 10px;
+}
+.join-container .login-form .new-user-btn {
+  margin-top: 10px;
+  font-size: 14px;
+  color: grey;
+  width: 300px;
+  height: 35px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+.join-container .login-form .new-user-btn:hover {
+  text-decoration: underline;
+  color: black;
+}
+.join-container .username {
+  font-family: Arial, Helvetica, sans-serif;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 10px;
+}
+
+.battle-page {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 100vh;
+  border: 2px solid orange;
+}
+.battle-page .container {
+  display: flex;
+}
+.battle-page .container .grid-user {
+  width: 420px;
+  height: 420px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(0, 136, 255);
+  margin: 20px;
+}
+.battle-page .container .grid-user .grid,
+.battle-page .container .grid-user div {
+  width: 40px;
+  height: 40px;
+  border: 1px solid;
+}
+.battle-page .grid-display {
+  width: 400px;
+  height: 400px;
+  margin: 20px;
+  background-color: rgb(69, 230, 230);
+}
+.battle-page .grid-display .rowboat-container {
+  width: 80px;
+  height: 40px;
+  background-color: rgb(164, 119, 60);
+  margin: 10px;
+  display: flex;
+  border-radius: 25px;
+}
+.battle-page .grid-display .rowboat-container-vertical {
+  width: 40px;
+  height: 80px;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 25px;
+}
+.battle-page .grid-display .sailboat-container {
+  width: 120px;
+  height: 40px;
+  margin: 10px;
+  display: flex;
+  border-radius: 25px;
+}
+.battle-page .grid-display .sailboat-container-vertical {
+  width: 40px;
+  height: 80px;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 25px;
+}
+.battle-page .grid-display .fishingboat-container {
+  width: 120px;
+  height: 40px;
+  margin: 10px;
+  display: flex;
+  border-radius: 25px;
+}
+.battle-page .grid-display .fishingboat-container-vertical {
+  width: 40px;
+  height: 120px;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 25px;
+}
+.battle-page .grid-display .pirateship-container {
+  width: 160px;
+  height: 40px;
+  margin: 10px;
+  display: flex;
+  border-radius: 25px;
+}
+.battle-page .grid-display .pirateship-container-vertical {
+  width: 40px;
+  height: 160px;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 25px;
+}
+.battle-page .grid-display .oiltanker-container {
+  width: 200px;
+  height: 40px;
+  margin: 10px;
+  display: flex;
+  border-radius: 25px;
+}
+.battle-page .grid-display .oiltanker-container-vertical {
+  width: 40px;
+  height: 200px;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 25px;
+}
+.battle-page .grid-display .rubberduck-container {
+  width: 40px;
+  height: 40px;
+  background-color: yellow;
+  margin: 10px;
+  display: flex;
+  border-radius: 50px;
+}
+.battle-page .grid-display .grandpakid-container {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  margin: 10px;
+  display: flex;
+  border-radius: 0 0 20px 20px;
+}
+.battle-page .grid-display .ship div {
+  width: 40px;
+  height: 40px;
+}
+
+.btn {
+  width: 120px;
+  height: 30px;
+  border-radius: 20px;
+  border-style: none;
+  background-color: #ecd0ff;
+  cursor: pointer;
+  font-size: 16px;
+}
+.btn:hover {
+  background-color: #b98adf;
+}
+
+.chat-container {
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: #fffef3;
+  padding: 10px;
+  border-left: 1px solid #fff0d4;
+}
+.chat-container .chat-box {
+  height: 80%;
+  width: 380px;
+  border: 2px solid #c4c4c4;
+  border-radius: 10px;
+  overflow-y: scroll;
+  background-color: white;
+}
+.chat-container .chat-box .chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 50px;
+}
+.chat-container .chat-box .chat-list .sent-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.chat-container .chat-box .chat-list .sent-container .sent {
+  display: flex;
+  font-size: large;
+  color: #3a3a3a;
+  max-width: 60%;
+  justify-content: flex-end;
+  border-radius: 15px;
+  background-color: #ecd0ff;
+  padding: 10px;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+.chat-container .chat-box .chat-list .received-container {
+  display: flex;
+}
+.chat-container .chat-box .chat-list .received-container .received {
+  max-width: 60%;
+  overflow: hidden;
+  font-size: larger;
+  color: #3a3a3a;
+  border-radius: 15px;
+  background-color: rgb(231, 231, 231);
+  padding: 10px;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+.chat-container .send-message-container {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.chat-container .send-message-container .input-field {
+  height: 15px;
+  border-radius: 10px;
+  border: 2px solid #c4c4c4;
+  width: 240px;
+  height: 50px;
+  padding: 0.5rem;
+}
+.chat-container .send-message-container .send-btn {
+  height: 50px;
+}
+
+li {
+  list-style: none;
+}
+
+.btn {
+  width: 120px;
+  height: 30px;
+  border-radius: 20px;
+  border-style: none;
+  background-color: #ecd0ff;
+  cursor: pointer;
+  font-size: 16px;
+}
+.btn:hover {
+  background-color: #b98adf;
+}/*# sourceMappingURL=style.max.css.map */
