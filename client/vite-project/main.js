@@ -54,7 +54,7 @@ socket.on('disconnect', (disconnectedUser) => {
   });
 });
 //=================================================
-//=============   BATTLESHIP COLOR   ==============
+//=============   BATTLESHIP COLOR   ==============      in progress
 //=================================================
 let ships = document.querySelectorAll('.ship'); 
 
@@ -62,10 +62,18 @@ ships.forEach(ship => {
   ship.style.backgroundColor = myColor;  
 });
 
+//=================================================
+//==========   ATTACKING BATTLEGROUND   ===========      in progress
+//=================================================
 
-//=================================================
-//==========   ATTACKING BATTLEGROUND   ===========
-//=================================================
+socket.on('colorChanged', (colorData) => {
+  let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
+  if (targetDiv) {
+    targetDiv.style.backgroundColor = colorData.color;    //lägga till en div istället? 
+    targetDiv.style.borderRadius = '50%';
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   for (let i = 0; i < 100; i++) {
     let div = document.querySelector(`[data-id="${i}"]`);
@@ -73,11 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
       div.addEventListener('click', () => {
         div.style.backgroundColor = myColor; 
         div.style.borderRadius = '50%';
+
+        socket.emit('colorChange', { position: i, color: myColor });
       }); 
     }
   }
 });
-
 //=================================================
 //================   CHAT ROOM   ==================
 //=================================================

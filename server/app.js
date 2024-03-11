@@ -57,6 +57,10 @@ io.on('connection', (socket) => {
     console.log('incoming chat', arg);
     socket.broadcast.emit('chat', arg.message, arg.sender, arg.color);
 
+    socket.on('colorChange', (changeData) => {
+        io.emit('colorChanged', changeData);
+      });
+
     /* try {
       const newMessage = new Message({ content: arg.message });
 
