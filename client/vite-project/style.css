@@ -83,7 +83,7 @@
 .battle-page .grid-display .rowboat-container {
   width: 80px;
   height: 40px;
-  background-color: rgb(164, 119, 60);
+  background-color: pink;
   margin: 10px;
   display: flex;
   border-radius: 25px;
@@ -91,7 +91,7 @@
 .battle-page .grid-display .rowboat-container-vertical {
   width: 40px;
   height: 80px;
-  background-color: rgb(164, 119, 60);
+  background-color: pink;
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -100,7 +100,7 @@
 .battle-page .grid-display .sailboat-container {
   width: 120px;
   height: 40px;
-  background-color: pink;
+  background-color: purple;
   margin: 10px;
   display: flex;
   border-radius: 25px;
@@ -108,30 +108,13 @@
 .battle-page .grid-display .sailboat-container-vertical {
   width: 40px;
   height: 120px;
-  background-color: pink;
+  background-color: purple;
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
   border-radius: 25px;
 }
 .battle-page .grid-display .fishingboat-container {
-  width: 120px;
-  height: 40px;
-  background-color: purple;
-  margin: 10px;
-  display: flex;
-  border-radius: 25px;
-}
-.battle-page .grid-display .fishingboat-container-vertical {
-  width: 40px;
-  height: 120px;
-  background-color: purple;
-  margin: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  border-radius: 25px;
-}
-.battle-page .grid-display .pirateship-container {
   width: 160px;
   height: 40px;
   background-color: blue;
@@ -139,7 +122,7 @@
   display: flex;
   border-radius: 25px;
 }
-.battle-page .grid-display .pirateship-container-vertical {
+.battle-page .grid-display .fishingboat-container-vertical {
   width: 40px;
   height: 160px;
   background-color: blue;
@@ -148,7 +131,7 @@
   flex-wrap: wrap;
   border-radius: 25px;
 }
-.battle-page .grid-display .oiltanker-container {
+.battle-page .grid-display .pirateship-container {
   width: 200px;
   height: 40px;
   background-color: green;
@@ -156,7 +139,7 @@
   display: flex;
   border-radius: 25px;
 }
-.battle-page .grid-display .oiltanker-container-vertical {
+.battle-page .grid-display .pirateship-container-vertical {
   width: 40px;
   height: 200px;
   background-color: green;

@@ -66,8 +66,8 @@ function updateChat(chat, sender) {
     div.classList.add('received-container');
     name.innerText = sender;
   }
-  div.appendChild(li);
   div.appendChild(name);
+  div.appendChild(li);
   chatList.appendChild(div);
 
   scrollToBottom();
