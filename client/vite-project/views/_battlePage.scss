@@ -7,7 +7,7 @@
   .container {
     display: flex;
 
-    .grid-user {
+    .grid-display {
       width: 420px;
       height: 420px;
       display: flex;
@@ -17,14 +17,14 @@
 
       .grid,
       div {
-        width: 40px;
-        height: 40px;
+        width: 20px;
+        height: 20px;
         border: 1px solid;
       }
     }
   }
 
-  .grid-display {
+  .grid-user {
     width: 400px;
     height: 400px;
     margin: 20px;
@@ -33,7 +33,7 @@
     .rowboat-container {
       width: 80px;
       height: 40px;
-      background-color: rgb(164, 119, 60);
+      //background-color: pink;
       margin: 10px;
       display: flex;
       border-radius: 25px;
@@ -41,7 +41,7 @@
     .rowboat-container-vertical {
       width: 40px;
       height: 80px;
-      // background-color: rgb(164, 119, 60);
+      background-color: rgb(164, 119, 60);
       margin: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -51,7 +51,26 @@
     .sailboat-container {
       width: 120px;
       height: 40px;
-      // background-color: pink;
+      background-color: pink;
+      margin: 10px;
+      display: flex;
+      border-radius: 25px;
+    }
+
+    .rowboat-container-vertical {
+      width: 40px;
+      height: 120px;
+      background-color: pink;
+      margin: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      border-radius: 25px;
+    }
+
+    .sailboat-container {
+      width: 120px;
+      height: 40px;
+      background-color: purple;
       margin: 10px;
       display: flex;
       border-radius: 25px;
@@ -59,8 +78,8 @@
 
     .sailboat-container-vertical {
       width: 40px;
-      height: 80px;
-      //   background-color: pink;
+      height: 120px;
+      background-color: purple;
       margin: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -68,9 +87,9 @@
     }
 
     .fishingboat-container {
-      width: 120px;
+      width: 160px;
       height: 40px;
-      //  background-color: purple;
+      background-color: blue;
       margin: 10px;
       display: flex;
       border-radius: 25px;
@@ -78,8 +97,8 @@
 
     .fishingboat-container-vertical {
       width: 40px;
-      height: 120px;
-      //  background-color: purple;
+      height: 160px;
+      background-color: blue;
       margin: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -87,9 +106,9 @@
     }
 
     .pirateship-container {
-      width: 160px;
+      width: 200px;
       height: 40px;
-      //  background-color: blue;
+      background-color: green;
       margin: 10px;
       display: flex;
       border-radius: 25px;
@@ -97,27 +116,8 @@
 
     .pirateship-container-vertical {
       width: 40px;
-      height: 160px;
-      //  background-color: blue;
-      margin: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      border-radius: 25px;
-    }
-
-    .oiltanker-container {
-      width: 200px;
-      height: 40px;
-      // background-color: green;
-      margin: 10px;
-      display: flex;
-      border-radius: 25px;
-    }
-
-    .oiltanker-container-vertical {
-      width: 40px;
       height: 200px;
-      //  background-color: green;
+      background-color: green;
       margin: 10px;
       display: flex;
       flex-wrap: wrap;

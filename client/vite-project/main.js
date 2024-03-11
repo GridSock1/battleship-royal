@@ -23,6 +23,9 @@ joinBtn.addEventListener('click', (e) => {
   nameInput.value = '';
 });
 
+//=================================================
+//==============   PLAYERS LIST   =================
+//=================================================
 function addPlayer() {
   let username = nameInput.value;
   let color = myColor;
@@ -41,32 +44,35 @@ function addPlayer() {
     });
   });
 }
-//=================================================
-//==============   PLAYERS LIST   =================
-//=================================================
-/*  socket.on('connect', () => {
-  let user = localStorage.getItem('user');
-  let userColor = localStorage.getItem('userColor');
 
-  let listItem = document.createElement('li');
-  listItem.classList.add('username');
-  listItem.textContent = user;
-  listItem.style.backgroundColor = userColor;
-  usersList.appendChild(listItem);
-})  */
-
-socket.on('disconnect', () => {
-  let username = localStorage.getItem('username');
-
-  const index = playersList.indexOf(username);
-  if (index !== -1) {
-    playersList.splice(index, 1);
-    io.emit('usersConnected', playersList);
-  }
+socket.on('disconnect', (disconnectedUser) => {
+  let listItems = usersList.querySelectorAll('.username');
+  listItems.forEach((listItem) => {
+    if (listItem.textContent === disconnectedUser.username) {
+      listItem.remove();
+    }
+  });
 });
 //=================================================
-//==========   ATTACKING BATTLEGROUND   ===========
+//=============   BATTLESHIP COLOR   ==============      in progress
 //=================================================
+let ships = document.querySelectorAll('.ship');
+
+ships.forEach((ship) => {
+  ship.style.backgroundColor = myColor;
+});
+
+//=================================================
+//==========   ATTACKING BATTLEGROUND   ===========      in progress
+//=================================================
+
+socket.on('colorChanged', (colorData) => {
+  let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
+  if (targetDiv) {
+    targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
+    targetDiv.style.borderRadius = '50%';
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   for (let i = 0; i < 100; i++) {
@@ -75,11 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
       div.addEventListener('click', () => {
         div.style.backgroundColor = myColor;
         div.style.borderRadius = '50%';
+
+        socket.emit('colorChange', { position: i, color: myColor });
       });
     }
   }
 });
-
 //=================================================
 //================   CHAT ROOM   ==================
 //=================================================
@@ -119,8 +126,8 @@ function updateChat(chat, sender, color) {
     name.innerText = sender;
     li.style.backgroundColor = color;
   }
-  div.appendChild(li);
   div.appendChild(name);
+  div.appendChild(li);
   chatList.appendChild(div);
 
   scrollToBottom();
