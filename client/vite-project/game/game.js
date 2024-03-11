@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const displayGrid = document.getElementById('gridDisplay');
-  const userGrid = document.querySelector('.grid-user');
+  const displayGrid = document.querySelector('grid-user');
+  const userGrid = document.getElementById('gridDisplay');
   const userSquares = [];
   const ships = document.querySelectorAll('.ship');
   const rowboat = document.querySelector('.rowboat-container');
