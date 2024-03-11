@@ -1,16 +1,15 @@
 import { io } from 'socket.io-client';
 const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 
-
-//const joinContainer = document.getElementById('joinContainer'); 
 const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
 let chatList = document.getElementById('chatList');
-let myName = localStorage.getItem('user');
-let myColor = localStorage.getItem('userColor');
+let myName = localStorage.getItem('username');
+let myColor = getRandomColor();
 
 //================================================
 //==================   LOG IN   ==================
@@ -20,19 +19,34 @@ const joinBtn = document.getElementById('joinBtn');
 
 joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  let user = nameInput.value;
-  localStorage.setItem('user', user);
-
-  let userColor = getRandomColor(); 
-  localStorage.setItem('userColor', userColor);
-
-  nameInput.value = '';
-  
+  addPlayer(); 
+  nameInput.value = '';  
 });
+
+function addPlayer() {
+  let username = nameInput.value;
+  let color = myColor; 
+  localStorage.setItem('username', username);
+  socket.emit('login', { username, color });
+
+  socket.on('usersConnected', (playersList) => {
+    usersList.innerHTML = '';
+
+    playersList.forEach(player => {
+        let listItem = document.createElement('li');
+        listItem.classList.add('username');
+        listItem.textContent = player.username;
+        listItem.style.backgroundColor = player.color; 
+        usersList.appendChild(listItem);
+  });
+}) 
+
+
+}
 //=================================================
 //==============   PLAYERS LIST   =================
 //=================================================
-socket.on('connect', () => {
+/*  socket.on('connect', () => {
   let user = localStorage.getItem('user');
   let userColor = localStorage.getItem('userColor');
 
@@ -41,20 +55,36 @@ socket.on('connect', () => {
   listItem.textContent = user; 
   listItem.style.backgroundColor = userColor; 
   usersList.appendChild(listItem);
-})
+})  */
 
 socket.on('disconnect', () => {
-  let user = localStorage.getItem('user');
-  let listItems = usersList.getElementsByTagName('li');
+  let username = localStorage.getItem('username');
+ 
+  const index = playersList.indexOf(username);
+  if (index !== -1) {
+      playersList.splice(index, 1); 
+      io.emit('usersConnected', playersList); 
+  }
+})  
+//=================================================
+//==========   ATTACKING BATTLEGROUND   ===========
+//=================================================
 
-  for (let i = 0; i < listItems.length; i++) {
-    if (listItems[i].textContent === user) {
-      listItems[i].remove(); 
-      break;
+document.addEventListener('DOMContentLoaded', () => {
+  for (let i = 0; i < 100; i++) {
+    let div = document.querySelector(`[data-id="${i}"]`);
+    if (div) { 
+      div.addEventListener('click', () => {
+        div.style.backgroundColor = myColor; 
+        div.style.borderRadius = '50%';
+      }); 
     }
   }
-})
+});
 
+
+//=================================================
+//================   CHAT ROOM   ==================
 //=================================================
 sendBtn.addEventListener('click', () => {
   let messageObject = { message: sendMessage.value, sender: myName, color: myColor };

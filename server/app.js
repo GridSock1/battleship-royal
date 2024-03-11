@@ -8,32 +8,44 @@ const io = require('socket.io')(server, {
   },
 });
 
-const botName = "QuackBot";
+const {
+    userJoin, 
+    currentUser, 
+    userLeave
+} = require('./users.js'); 
 
-app.get('/test', (req, res) => {
+/* app.get('/test', (req, res) => {
   res.send('<h1>Socket</h1>');
-});
+}); */
 
-let activeUsers = [];
+
+const botName = "QuackBot";
+let playersList = [];
+
 
 io.on('connection', (socket) => {
     console.log('A user connected', socket.id);
 
-    socket.on('login', (user) => {
-        activeUsers.push(user); // Lägg till användaren till listan över aktiva användare
-        console.log(`${user} joined the server`);
-        io.emit('userConnected', user); // Skicka användarens namn till alla anslutna klienter
-      });
+    socket.on('login', ({ username, color }) => { 
+        playersList.push({ username, id: socket.id, color }); 
+        console.log(playersList, 'player list, app');
+        console.log(`${username} joined the server`);
+        io.emit('usersConnected', playersList); 
+        
+        const user = userJoin(socket.id, username, color);
+        socket.join(user); 
+        console.log('user', user);
+    });
 
     socket.on('disconnect', () => {
-        console.log('A user disconnected');
-    let index = activeUsers.indexOf(socket.user);
-    if (index !== -1) {
-      let user = activeUsers.splice(index, 1)[0]; // Ta bort användaren från listan över aktiva användare
-      console.log(`${user} left the server`);
-      io.emit('userDisconnected', user); // Skicka användarens namn till alla anslutna klienter
-    }
-  });
+        const disconnectedUser = playersList.find(user => user.id === socket.id);
+        
+        if (disconnectedUser) {
+            playersList = playersList.filter(user => user.id !== socket.id);
+            console.log(`${disconnectedUser.username} left the server`);
+            io.emit('userDisconnected', disconnectedUser); 
+        }
+    });
 
   socket.emit(
     'chat',
