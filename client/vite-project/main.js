@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
-//const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-const socket = io('http://localhost:3031');
+const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+// const socket = io('http://localhost:3031');
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 
@@ -19,8 +19,8 @@ const joinBtn = document.getElementById('joinBtn');
 
 joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  addPlayer(); 
-  nameInput.value = '';  
+  addPlayer();
+  nameInput.value = '';
 });
 
 //=================================================
@@ -28,38 +28,38 @@ joinBtn.addEventListener('click', (e) => {
 //=================================================
 function addPlayer() {
   let username = nameInput.value;
-  let color = myColor; 
+  let color = myColor;
   localStorage.setItem('username', username);
   socket.emit('login', { username, color });
 
   socket.on('usersConnected', (playersList) => {
     usersList.innerHTML = '';
 
-    playersList.forEach(player => {     
+    playersList.forEach((player) => {
       let listItem = document.createElement('li');
       listItem.classList.add('username');
       listItem.textContent = player.username;
-      listItem.style.backgroundColor = player.color; 
+      listItem.style.backgroundColor = player.color;
       usersList.appendChild(listItem);
     });
-  }) 
+  });
 }
 
 socket.on('disconnect', (disconnectedUser) => {
   let listItems = usersList.querySelectorAll('.username');
-  listItems.forEach(listItem => {
-      if (listItem.textContent === disconnectedUser.username) {
-          listItem.remove();
-      }
+  listItems.forEach((listItem) => {
+    if (listItem.textContent === disconnectedUser.username) {
+      listItem.remove();
+    }
   });
 });
 //=================================================
 //=============   BATTLESHIP COLOR   ==============      in progress
 //=================================================
-let ships = document.querySelectorAll('.ship'); 
+let ships = document.querySelectorAll('.ship');
 
-ships.forEach(ship => {
-  ship.style.backgroundColor = myColor;  
+ships.forEach((ship) => {
+  ship.style.backgroundColor = myColor;
 });
 
 //=================================================
@@ -69,7 +69,7 @@ ships.forEach(ship => {
 socket.on('colorChanged', (colorData) => {
   let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
   if (targetDiv) {
-    targetDiv.style.backgroundColor = colorData.color;    //lägga till en div istället? 
+    targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
     targetDiv.style.borderRadius = '50%';
   }
 });
@@ -77,13 +77,13 @@ socket.on('colorChanged', (colorData) => {
 document.addEventListener('DOMContentLoaded', () => {
   for (let i = 0; i < 100; i++) {
     let div = document.querySelector(`[data-id="${i}"]`);
-    if (div) { 
+    if (div) {
       div.addEventListener('click', () => {
-        div.style.backgroundColor = myColor; 
+        div.style.backgroundColor = myColor;
         div.style.borderRadius = '50%';
 
         socket.emit('colorChange', { position: i, color: myColor });
-      }); 
+      });
     }
   }
 });
@@ -91,7 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
 //================   CHAT ROOM   ==================
 //=================================================
 sendBtn.addEventListener('click', () => {
-  let messageObject = { message: sendMessage.value, sender: myName, color: myColor };
+  let messageObject = {
+    message: sendMessage.value,
+    sender: myName,
+    color: myColor,
+  };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject); //skickar meddelande
@@ -115,12 +119,12 @@ function updateChat(chat, sender, color) {
     li.classList.add('sent');
     div.classList.add('sent-container');
     name.innerText = myName;
-    li.style.backgroundColor = myColor; 
+    li.style.backgroundColor = myColor;
   } else {
     li.classList.add('received');
     div.classList.add('received-container');
     name.innerText = sender;
-    li.style.backgroundColor = color; 
+    li.style.backgroundColor = color;
   }
   div.appendChild(name);
   div.appendChild(li);
