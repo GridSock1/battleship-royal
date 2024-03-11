@@ -8,8 +8,8 @@
     display: flex;
 
     .grid-user {
-      width: 420px;
-      height: 420px;
+      width: 880px;
+      height: 880px;
       display: flex;
       flex-wrap: wrap;
       background-color: rgb(0, 136, 255);
@@ -17,16 +17,16 @@
 
       .grid,
       div {
-        width: 40px;
-        height: 40px;
+        width: 20px;
+        height: 20px;
         border: 1px solid;
       }
     }
   }
 
   .grid-display {
-    width: 400px;
-    height: 400px;
+    width: 200px;
+    height: 200px;
     margin: 20px;
     background-color: rgb(69, 230, 230);
 

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // const fishingboat = document.querySelector('.fishingboat-container');
   // const pirateship = document.querySelector('.pirateship-container');
   // const oiltanker = document.querySelector('.oiltanker-container');
-  const width = 10;
+  const width = 40;
 
   function createBoard(grid, squares) {
     for (let i = 0; i < width * width; i++) {
@@ -69,6 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   ];
 });
+
+// const addShipPiece = () => {
+//   const all
+// }
 
 // function generate(ship) {
 //   let randomDirection = Math.floor(Math.random() * ship.directions.length);
