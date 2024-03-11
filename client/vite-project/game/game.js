@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const displayGrid = document.getElementById('gridDisplay');
-  const userGrid = document.querySelector('.grid-user');
+  const displayGrid = document.querySelector('grid-user');
+  const userGrid = document.getElementById('gridDisplay');
   const userSquares = [];
-  // const ships = document.querySelectorAll('.ship');
-  // const rowboat = document.querySelector('.rowboat-container');
-  // const sailboat = document.querySelector('.sailboat-container');
-  // const fishingboat = document.querySelector('.fishingboat-container');
-  // const pirateship = document.querySelector('.pirateship-container');
-  // const oiltanker = document.querySelector('.oiltanker-container');
-  const width = 40;
+  const ships = document.querySelectorAll('.ship');
+  const rowboat = document.querySelector('.rowboat-container');
+  const sailboat = document.querySelector('.sailboat-container');
+  const fishingboat = document.querySelector('.fishingboat-container');
+  const pirateship = document.querySelector('.pirateship-container');
+  const width = 10;
 
   function createBoard(grid, squares) {
     for (let i = 0; i < width * width; i++) {
@@ -41,19 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       name: 'fishing boat',
       directions: [
-        [0, 1, 2],
-        [0, width, width * 2],
-      ],
-    },
-    {
-      name: 'pirate ship',
-      directions: [
         [0, 1, 2, 3],
         [0, width, width * 2, width * 3],
       ],
     },
     {
-      name: 'oil tanker',
+      name: 'pirate ship',
       directions: [
         [0, 1, 2, 3, 4],
         [0, width, width * 2, width * 3, width * 4],
@@ -68,36 +60,35 @@ document.addEventListener('DOMContentLoaded', () => {
       directions: [[0], [0, width]],
     },
   ];
+
+  // function generate(ship) {
+  //   let randomDirection = Math.floor(Math.random() * ship.directions.length);
+  //   let current = ship.directions[randomDirection];
+
+  //   if (randomDirection === 0) direction = 1;
+  //   if (randomDirection === 1) direction = 10;
+
+  //   let randomStart = Math.abs(
+  //     Math.floor(
+  //       Math.random() * userSquares.length -
+  //         ship.directions[0].length * direction
+  //     )
+  //   );
+
+  //   const isTaken = current.some((index) =>
+  //     userSquares[randomStart + index].classList.contains('taken')
+  //   );
+  //   const isAtRightEdge = current.some(
+  //     (index) => (randomStart + index) % width === width - 1
+  //   );
+  //   const isAtLeftEdge = current.some(
+  //     (index) => (randomStart + index) % width === 0
+  //   );
+
+  //   if (!isTaken && !isAtRightEdge && !isAtLeftEdge)
+  //     current.forEach((index) =>
+  //       userSquares[randomStart + index].classList.add('taken', ship.name)
+  //     );
+  //   else generate(ship);
+  // }
 });
-
-// const addShipPiece = () => {
-//   const all
-// }
-
-// function generate(ship) {
-//   let randomDirection = Math.floor(Math.random() * ship.directions.length);
-//   let current = ship.directions[randomDirection];
-//   if (randomDirection === 0) direction = 1;
-//   if (randomDirection === 1) direction = 10;
-//   let randomStart = Math.abs(
-//     Math.floor(
-//       Math.random() * userSquares.length - ship.directions[0].length * direction
-//     )
-//   );
-
-//   const isTaken = current.some((index) =>
-//     userSquares[randomStart + index].classList.contains('taken')
-//   );
-//   const isAtRightEdge = current.some(
-//     (index) => (randomStart + index) % width === width - 1
-//   );
-//   const isAtLeftEdge = current.some(
-//     (index) => (randomStart + index) % width === 0
-//   );
-
-//   if (!isTaken && !isAtRightEdge && !isAtLeftEdge)
-//     current.forEach((index) =>
-//       userSquares[randomStart + index].classList.add('taken', ship.name)
-//     );
-//   else generate(ship);
-// }

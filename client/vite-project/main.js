@@ -118,8 +118,8 @@ function updateChat(chat, sender, color) {
     name.innerText = sender;
     li.style.backgroundColor = color; 
   }
-  div.appendChild(li);
   div.appendChild(name);
+  div.appendChild(li);
   chatList.appendChild(div);
 
   scrollToBottom();
