@@ -18,8 +18,13 @@ const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
 let chatList = document.getElementById('chatList');
-let myName = localStorage.getItem('username');
-let myColor = getRandomColor();
+let myName;
+// --- user color ---
+let myColor = 'pink';
+
+socket.on('color', (color) => {
+  myColor = color;
+});
 
 //================================================
 //==================   LOG IN   ==================
