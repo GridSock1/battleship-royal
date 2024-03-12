@@ -30,8 +30,8 @@ let myColor = generateColor();
 //================================================
 joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  addPlayer(); 
-  nameInput.value = '';  
+  addPlayer();
+  nameInput.value = '';
 });
 
 //=================================================
@@ -59,10 +59,10 @@ socket.on('usersConnected', (playersList) => {
 
 socket.on('disconnect', (disconnectedUser) => {
   let listItems = usersList.querySelectorAll('.username');
-  listItems.forEach(listItem => {
-      if (listItem.textContent === disconnectedUser.username) {
-          listItem.remove();
-      }
+  listItems.forEach((listItem) => {
+    if (listItem.textContent === disconnectedUser.username) {
+      listItem.remove();
+    }
   });
 });
 
@@ -77,7 +77,7 @@ socket.on('disconnect', (disconnectedUser) => {
 //=================================================
 //=============   BATTLESHIP COLOR   ==============      in progress
 //=================================================
-let ships = document.querySelectorAll('.ship'); 
+let ships = document.querySelectorAll('.ship');
 
 ships.forEach(ship => {
   ship.style.backgroundColor = 'pink';  
@@ -89,21 +89,21 @@ ships.forEach(ship => {
 socket.on('colorChanged', (colorData) => {
   let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
   if (targetDiv) {
-    targetDiv.style.backgroundColor = colorData.color;    //lägga till en div istället? 
+    targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
     targetDiv.style.borderRadius = '50%';
   }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1600; i++) {
     let div = document.querySelector(`[data-id="${i}"]`);
-    if (div) { 
+    if (div) {
       div.addEventListener('click', () => {
-        div.style.backgroundColor = myColor; 
+        div.style.backgroundColor = myColor;
         div.style.borderRadius = '50%';
 
         socket.emit('colorChange', { position: i, color: myColor });
-      }); 
+      });
     }
   }
 });
@@ -115,7 +115,11 @@ socket.on('username', (username) => {
 })
 
 sendBtn.addEventListener('click', () => {
-  let messageObject = { message: sendMessage.value, sender: myName, color: myColor };
+  let messageObject = {
+    message: sendMessage.value,
+    sender: myName,
+    color: myColor,
+  };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
   socket.emit('chat', messageObject); //skickar meddelande
@@ -139,12 +143,12 @@ function updateChat(chat, sender, color) {
     li.classList.add('sent');
     div.classList.add('sent-container');
     name.innerText = myName;
-    li.style.backgroundColor = myColor; 
+    li.style.backgroundColor = myColor;
   } else {
     li.classList.add('received');
     div.classList.add('received-container');
     name.innerText = sender;
-    li.style.backgroundColor = color; 
+    li.style.backgroundColor = color;
   }
   div.appendChild(name);
   div.appendChild(li);

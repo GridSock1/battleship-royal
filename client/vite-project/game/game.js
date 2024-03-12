@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sailboat = document.querySelector('.sailboat-container');
   const fishingboat = document.querySelector('.fishingboat-container');
   const pirateship = document.querySelector('.pirateship-container');
-  const width = 10;
+  const width = 40;
 
   function createBoard(grid, squares) {
     for (let i = 0; i < width * width; i++) {
