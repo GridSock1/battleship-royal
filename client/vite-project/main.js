@@ -1,10 +1,20 @@
 import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-// const socket = io('http://localhost:3031');
-import getRandomColor from './modules/randomColor.mjs';
+//const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+const socket = io('http://localhost:3032');
+//import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 
+//================================================
+//==================   GLOBAL   ==================
+//================================================
+// --- log in ---
+const nameInput = document.getElementById('nameInput');
+const joinBtn = document.getElementById('joinBtn');
+
+// --- logged in users ---
 const usersList = document.getElementById('usersList');
+
+// --- chat ---
 let sendMessage = document.getElementById('sendMessage');
 let sendBtn = document.getElementById('sendBtn');
 let chatList = document.getElementById('chatList');
@@ -14,9 +24,6 @@ let myColor = getRandomColor();
 //================================================
 //==================   LOG IN   ==================
 //================================================
-const nameInput = document.getElementById('nameInput');
-const joinBtn = document.getElementById('joinBtn');
-
 joinBtn.addEventListener('click', (e) => {
   e.preventDefault();
   addPlayer();
@@ -28,22 +35,20 @@ joinBtn.addEventListener('click', (e) => {
 //=================================================
 function addPlayer() {
   let username = nameInput.value;
-  let color = myColor;
-  localStorage.setItem('username', username);
-  socket.emit('login', { username, color });
-
-  socket.on('usersConnected', (playersList) => {
-    usersList.innerHTML = '';
-
-    playersList.forEach((player) => {
-      let listItem = document.createElement('li');
-      listItem.classList.add('username');
-      listItem.textContent = player.username;
-      listItem.style.backgroundColor = player.color;
-      usersList.appendChild(listItem);
-    });
-  });
+  socket.emit('login', { username });
 }
+
+socket.on('usersConnected', (playersList) => {
+  usersList.innerHTML = '';
+
+  playersList.forEach((player) => {
+    let listItem = document.createElement('li');
+    listItem.classList.add('username');
+    listItem.textContent = player.username;
+    listItem.style.backgroundColor = player.color;
+    usersList.appendChild(listItem);
+  });
+});
 
 socket.on('disconnect', (disconnectedUser) => {
   let listItems = usersList.querySelectorAll('.username');
@@ -65,7 +70,6 @@ ships.forEach((ship) => {
 //=================================================
 //==========   ATTACKING BATTLEGROUND   ===========      in progress
 //=================================================
-
 socket.on('colorChanged', (colorData) => {
   let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
   if (targetDiv) {
@@ -79,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let div = document.querySelector(`[data-id="${i}"]`);
     if (div) {
       div.addEventListener('click', () => {
-        div.style.backgroundColor = myColor;
+        div.style.backgroundColor = myColor; //ändra till spelarens färg
         div.style.borderRadius = '50%';
 
         socket.emit('colorChange', { position: i, color: myColor });
