@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
-const PORT = process.env.PORT || 4040;
+const PORT = process.env.PORT || 8080;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 
-const messageRoutes = require('./routes/messageRoutes');
+const messageRoutes = require('./routes/messageRoutes.js');
 const playerRoutes = require('./routes/messageRoutes.js');
 // const sessionRoutes = require('./routes/sessionRoutes.js');
 const mongoose = require('mongoose');
