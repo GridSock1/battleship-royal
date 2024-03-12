@@ -15,7 +15,7 @@ const io = require('socket.io')(server, {
 
 const { userJoin, currentUser, userLeave } = require('./users.js');
 
-const Message = require('../database/models/messageModel.js');
+const Message = require('./models/messageModel.js');
 
 mongoose
   .connect(

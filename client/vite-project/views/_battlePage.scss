@@ -8,15 +8,15 @@
     display: flex;
 
     .grid-display {
-      width: 420px;
-      height: 420px;
-      display: flex;
-      flex-wrap: wrap;
-      background-color: rgb(0, 136, 255);
+      width: 880px;
+      height: 880px;
+      display: grid;
+      grid-template-columns: repeat(40, 1fr);
       margin: 20px;
 
       .grid,
       div {
+        background-color: rgb(0, 136, 255);
         width: 20px;
         height: 20px;
         border: 1px solid;
@@ -25,8 +25,8 @@
   }
 
   .grid-user {
-    width: 400px;
-    height: 400px;
+    width: 420px;
+    height: 420px;
     margin: 20px;
     background-color: rgb(69, 230, 230);
 

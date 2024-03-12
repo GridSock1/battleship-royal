@@ -75,7 +75,7 @@ socket.on('colorChanged', (colorData) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1600; i++) {
     let div = document.querySelector(`[data-id="${i}"]`);
     if (div) {
       div.addEventListener('click', () => {
