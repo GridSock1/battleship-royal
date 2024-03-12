@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   createBoard(userGrid, userSquares);
 
-  console.log('Board created:', userGrid, userSquares);
+ // console.log('Board created:', userGrid, userSquares);
 
   const shipArray = [
     {
