@@ -80,7 +80,7 @@ socket.on('disconnect', (disconnectedUser) => {
 let ships = document.querySelectorAll('.ship');
 
 ships.forEach(ship => {
-  ship.style.backgroundColor = myColor;        //ej klar
+  ship.style.backgroundColor = myColor;        //ej klar 
 });
 
 //=================================================
