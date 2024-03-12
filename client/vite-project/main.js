@@ -3,7 +3,7 @@ const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
 // const socket = io('http://localhost:3032');
 //import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
-
+ 
 //================================================
 //==================   GLOBAL   ==================
 //================================================
