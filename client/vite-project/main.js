@@ -99,6 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
 //=================================================
 //================   CHAT ROOM   ==================
 //=================================================
+socket.on('username', (username) => {
+  myName = username;
+})
 
 // Send message by pressing ENTER on keyboard
 sendMessage.addEventListener('keypress', (event) => {
