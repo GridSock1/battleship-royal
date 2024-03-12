@@ -1,51 +1,55 @@
-
 .join-container {
-    border: 2px solid blue; 
-    height: auto;
+  border: 2px solid blue;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+
+  .login-form {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    gap: 5px;
 
-    .login-form {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        
-        .inputfield {
-            height: 25px;
-            border-radius: 20px;
-            padding-left: 10px;
-            width: 290px;
-        }
-        
-        .join-btn {
-            width: 300px;
-            height: 35px;
-            margin-top: 10px;
-        }
-
-        .new-user-btn {
-            margin-top: 10px;
-            font-size: 14px;
-            color: grey; 
-            width: 300px;
-            height: 35px;
-            background-color: white;
-            border: none; 
-            cursor: pointer;
-
-            &:hover {
-                text-decoration: underline;
-                color: black; 
-            }
-        }
+    .inputfield {
+      height: 25px;
+      border-radius: 20px;
+      padding-left: 10px;
+      width: 290px;
     }
+
+    .join-btn {
+      width: 300px;
+      height: 35px;
+      margin-top: 10px;
+    }
+
+    .new-user-btn {
+      margin-top: 10px;
+      font-size: 14px;
+      color: grey;
+      width: 300px;
+      height: 35px;
+      background-color: white;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+        color: black;
+      }
+    }
+  }
+
+  #usersList {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
 
     .username {
-        font-family: Arial, Helvetica, sans-serif;
-        padding-left: 10px;
-        padding-right: 10px; 
-        padding-top: 2px; 
-        padding-bottom: 2px; 
-        border-radius: 10px;
+      font-family: Arial, Helvetica, sans-serif;
+      max-height: 1rem;
+      padding: 5px;
+      border-radius: 10px;
     }
+  }
 }

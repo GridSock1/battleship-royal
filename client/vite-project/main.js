@@ -90,7 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
 //=================================================
 //================   CHAT ROOM   ==================
 //=================================================
-sendBtn.addEventListener('click', () => {
+
+// Send message by pressing ENTER on keyboard
+sendMessage.addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    sendChatMessage();
+  }
+});
+
+// Function to send chat message
+function sendChatMessage() {
   let messageObject = {
     message: sendMessage.value,
     sender: myName,
@@ -98,10 +108,13 @@ sendBtn.addEventListener('click', () => {
   };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
-  socket.emit('chat', messageObject); //skickar meddelande
+  socket.emit('chat', messageObject); // Sends message
   updateChat(sendMessage.value, 'sent');
-  sendMessage.value = '';
-});
+  sendMessage.value = ''; // Clear input field after sending
+}
+
+// Send message by clicking sendBtn
+sendBtn.addEventListener('click', sendChatMessage);
 
 socket.on('chat', (arg, sender, color) => {
   console.log('main.js - socket', arg);
