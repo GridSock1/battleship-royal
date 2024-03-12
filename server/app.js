@@ -35,7 +35,7 @@ mongoose
 const botName = 'QuackBot';
 let playersList = [];
 // --- user color ---
-let availableColors = ['#08ff4a', '#ff08de', '#ff8308', '#ff0077', '#ededed', '#b300ff', '#84ab35', '#b07f6d', '#c406d1', '#adadad'];
+let availableColors = ['#08ff4a', '#ff08de', '#ff8308', '#ff0077', '#00e5ff', '#b300ff', '#84ab35', '#b07f6d', '#c406d1', '#adadad'];
 let assignedColors = [];
 
 function generateColor() {   
@@ -82,6 +82,11 @@ io.on('connection', (socket) => {
             io.emit('usersConnected', playersList); 
         }
     });
+
+    socket.on('shoot', ({ position, color}) => {
+        const colorData = { position, color } ;
+        io.emit('colorChanged', colorData); 
+    })
 
   socket.emit(
     'chat',

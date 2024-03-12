@@ -91,11 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
         div.style.backgroundColor = myColor; //ändra till spelarens färg
         div.style.borderRadius = '50%';
 
-        socket.emit('colorChange', { position: i, color: myColor });
+        socket.emit('shoot', { position: i, color: myColor });
       });
     }
   }
 });
+
 //=================================================
 //================   CHAT ROOM   ==================
 //=================================================
