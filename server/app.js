@@ -85,6 +85,7 @@ io.on('connection', (socket) => {
 
     socket.on('shoot', ({ position, color}) => {
         const colorData = { position, color } ;
+        console.log(colorData, 'colordata app js')
         io.emit('colorChanged', colorData); 
     })
 

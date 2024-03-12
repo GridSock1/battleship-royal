@@ -77,6 +77,7 @@ ships.forEach((ship) => {
 //=================================================
 socket.on('colorChanged', (colorData) => {
   let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
+  console.log(targetDiv, 'targetDiv')
   if (targetDiv) {
     targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
     targetDiv.style.borderRadius = '50%';
