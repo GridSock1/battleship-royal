@@ -19,7 +19,7 @@ const Message = require('./models/messageModel.js');
 
 mongoose
   .connect(
-    'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_test_server?retryWrites=true&w=majority&appName=Cluster0'
+    'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_live?retryWrites=true&w=majority&appName=Cluster0'
   )
   .then(() => {
     console.log('Connected to MongoDB from server');
