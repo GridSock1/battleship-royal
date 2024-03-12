@@ -2,8 +2,8 @@ import { io } from 'socket.io-client';
 
 import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
-// const socket = io('http://localhost:3032');
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app/');
+const socket = io('http://localhost:3032');
+// const socket = io('https://goldfish-app-e6acm.ondigitalocean.app/');
 
 const usersList = document.getElementById('usersList');
 let sendMessage = document.getElementById('sendMessage');
@@ -76,7 +76,7 @@ socket.on('colorChanged', (colorData) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1600; i++) {
     let div = document.querySelector(`[data-id="${i}"]`);
     if (div) {
       div.addEventListener('click', () => {
