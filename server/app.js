@@ -57,6 +57,7 @@ io.on('connection', (socket) => {
         io.emit('usersConnected', playersList); 
 
         socket.emit('username', username);
+        socket.emit('color', color);
         
         const user = userJoin(socket.id, username, color);
         socket.join(user); 

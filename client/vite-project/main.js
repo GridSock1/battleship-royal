@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 //const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-const socket = io('http://localhost:3031');
+const socket = io('http://localhost:3032');
 //import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 
@@ -20,11 +20,11 @@ let sendBtn = document.getElementById('sendBtn');
 let chatList = document.getElementById('chatList');
 let myName; 
 // --- user color ---
-/* let availableColors = ['#08ff4a', '#ff08de', '#ff8308', '#ff0077', '#ededed', '#b300ff', '#84ab35', '#b07f6d', '#c406d1', '#adadad'];
-let assignedColors = [];
-let nextColorIndex = 0; 
-let myColor = generateColor();
- */
+let myColor = 'pink';
+ 
+socket.on('color', (color) => {
+  myColor = color; 
+})
 //================================================
 //==================   LOG IN   ==================
 //================================================
@@ -80,7 +80,7 @@ socket.on('disconnect', (disconnectedUser) => {
 let ships = document.querySelectorAll('.ship');
 
 ships.forEach(ship => {
-  ship.style.backgroundColor = 'pink';  
+  ship.style.backgroundColor = myColor;        //ej klar
 });
 
 //=================================================
@@ -99,10 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let div = document.querySelector(`[data-id="${i}"]`);
     if (div) {
       div.addEventListener('click', () => {
-        div.style.backgroundColor = myColor;
+        div.style.backgroundColor = myColor; //ändra till spelarens färg
         div.style.borderRadius = '50%';
 
-        socket.emit('colorChange', { position: i, color: myColor });
+        socket.emit('colorChange', { position: i, color: myColor });//ändra till spelarens färg
       });
     }
   }
