@@ -14,7 +14,7 @@ const io = require('socket.io')(server, {
 });
 
 const { userJoin, currentUser, userLeave } = require('./users.js');
-//const { createAndPlaceShips } = require('./game-test.js');
+const { createAndPlaceShips } = require('./game-test.js');
 
 const Message = require('./models/messageModel.js');
 
@@ -35,53 +35,170 @@ mongoose
 
 const botName = 'QuackBot';
 let playersList = [];
+
 // --- user color ---
 let availableColors = ['#08ff4a', '#ff08de', '#ff8308', '#ff0077', '#00e5ff', '#b300ff', '#84ab35', '#b07f6d', '#c406d1', '#adadad'];
 let assignedColors = [];
 
+// --- battle ships ---
+let userShips = []; 
+let userSquares = []; 
+
+const width = 40;
+const shipsArray = [
+    {
+      name: 'rowboat',
+      directions: [
+        [0, 1],
+        [0, width],
+      ],
+    },
+    {
+      name: 'sailboat',
+      directions: [
+        [0, 1, 2],
+        [0, width, width * 2],
+      ],
+    },
+    {
+      name: 'fishingboat',
+      directions: [
+        [0, 1, 2, 3],
+        [0, width, width * 2, width * 3],
+      ],
+    },
+    {
+      name: 'pirateship',
+      directions: [
+        [0, 1, 2, 3, 4],
+        [0, width, width * 2, width * 3, width * 4],
+      ],
+    },  
+  ];
+
+  // function createAndPlaceShips(user){
+  //   const shipPositions = [];
+  //   shipsArray.forEach(ship => {
+  //     let isValidPlacement = false;
+  //     const shipPosition = {
+  //       name: ship.name,
+  //       positions: []
+  //     }
+  //     while (!isValidPlacement) {
+  //       const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
+  //       const randomDirection = ship.directions[randomDirectionIndex];
+  //       const randomStartIndex = Math.floor(Math.random() * width * width);
+  //       const startX = randomStartIndex % width;
+  //       const startY = Math.floor(randomStartIndex / width);
+  //       isValidPlacement = true;
+  //       for (let i = 0; i < randomDirection.length; i++) {
+  //         const nextX = startX + randomDirection[i] % width;
+  //         const nextY = startY + Math.floor(randomDirection[i] / width);
+  //         if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
+  //           isValidPlacement = false;
+  //           break;
+  //         }
+  //         shipPosition.positions.push([nextX, nextY])
+  //       }
+  //       if (isValidPlacement) {
+  //         for (let i = 0; i < randomDirection.length; i++) {
+  //           const nextX = startX + randomDirection[i] % width;
+  //           const nextY = startY + Math.floor(randomDirection[i] / width);
+  //           const square = userSquares[nextX + nextY * width];
+  //           square.classList.add('taken');
+  //           userSquares[nextX + nextY * width].dataset.ship = ship.name;
+  //           square.style.backgroundColor = user.color; // Tilldela färgen till skeppet om man lyckas exportera på nå vis
+  //         }
+  //       }
+  //     }
+  //     shipPositions.push(shipPosition)      
+  //   });
+  //   console.log('Array with ships',shipPositions)
+
+  //   user.shipPositions = shipPositions;
+  //   return shipPositions;
+  //   // socket.emit('placeShipPositions', {playerId: socket.id, shipPositions})
+  // }
+
+
+  // createAndPlaceShips();
+// --- color ---
 function generateColor() {   
     let randomColorIndex = Math.floor(Math.random() * availableColors.length);
     const color = availableColors[randomColorIndex];
     assignedColors.push(color); 
     availableColors.splice(randomColorIndex, 1); 
-    return color; // Returnera färgen för att användas av spelaren
+    return color; 
 }
-
 
 
 io.on('connection', (socket) => {
   console.log('A user connected', socket.id);
-
+  
     socket.on('login', ({ username }) => {
         const color = generateColor(); // Generera en färg för användaren
+
+        /* const userShips = [
+            {
+              name: 'rowboat',
+              directions: [
+                [0, 1],
+                [0, width],
+              ],
+            },
+            {
+              name: 'sailboat',
+              directions: [
+                [0, 1, 2],
+                [0, width, width * 2],
+              ],
+            },
+            {
+              name: 'fishingboat',
+              directions: [
+                [0, 1, 2, 3],
+                [0, width, width * 2, width * 3],
+              ],
+            },
+            {
+              name: 'pirateship',
+              directions: [
+                [0, 1, 2, 3, 4],
+                [0, width, width * 2, width * 3, width * 4],
+              ],
+            },  
+          ]; */
+
+
         playersList.push({ username, id: socket.id, color }); 
         console.log(playersList, 'player list, app');
         console.log(`${username} joined the server`);
-
+        //console.log(ships, 'ships')
+        
         io.emit('usersConnected', playersList); 
         socket.emit('username', username);
         socket.emit('color', color);
         
         const user = userJoin(socket.id, username, color);
-        socket.join(user); 
-        console.log('user', user);
+        socket.join(user.id); 
+        
+        // createAndPlaceShips(user); 
+        const shipPositions = createAndPlaceShips(user);
+        user.addShipPositions(shipPositions)
+        console.log('user', user);       
+       
+        socket.emit('playerSetup', { ships: user.shipPositions, color: user.color });
 
         console.log(assignedColors, 'assignedColors app');
-
-        //====================== Battle ships ====================
-        //createAndPlaceShips(color); //test  
-        //socket.emit('shipsPlacement', { shipsArray, color }); //test
-
-        /* const otherPlayersInfo = getOtherPlayersInfo(socket.id);
-        // info om andras båtar och färger till nya spelaren
-        socket.emit('otherPlayersSetup', otherPlayersInfo);
-    
-        // placera ut båtar för den nya spelaren
-        const playerShips = createAndPlaceShips();
-        socket.emit('playerSetup', { ships: playerShips, color }); */
-    
-        
+       
     });
+
+    socket.on('placeShipPositions', (positions) => {
+      const {playerId, shipPositions} = positions;
+      console.log('Placerade båtar nu', playerId, shipPositions)
+
+      io.emit('updateShipPositions', { playerId, shipPositions });
+    })
 
     socket.on('disconnect', () => {
         const disconnectedUser = playersList.find(user => user.id === socket.id);
@@ -134,3 +251,4 @@ io.on('connection', (socket) => {
 });
 
 server.listen(process.env.PORT || '3032');
+

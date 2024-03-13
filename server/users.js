@@ -1,7 +1,10 @@
+const {User} = require('./User.js')
+
 const users = []; 
 
-function userJoin(id, username, color) {
-    const user = { id, username, color }; 
+function userJoin(id, username, color, userShips) {
+    // const user = { id, username, color }; 
+    const user =  new User( id, username, color, userShips ); 
     users.push(user); 
     return user; 
 }

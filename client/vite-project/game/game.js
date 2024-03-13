@@ -1,3 +1,6 @@
+import { io } from 'socket.io-client';
+const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+
 document.addEventListener('DOMContentLoaded', () => {
   const displayGrid = document.querySelector('grid-user');
   const userGrid = document.getElementById('gridDisplay');
@@ -75,11 +78,10 @@ const forbiddenShipsArray = [
       grid.appendChild(square);
       squares.push(square);
     }
-    placeForbiddenShips();
-    createAndPlaceShips();
   }
-
+  
   createBoard(userGrid, userSquares);
+  
 
  // console.log('Board created:', userGrid, userSquares);
   
@@ -115,9 +117,14 @@ const forbiddenShipsArray = [
     }); 
   }
 
-  function createAndPlaceShips(color) {
+  /* function createAndPlaceShips(ships, color){
+    const shipPositions = [];
     shipsArray.forEach(ship => {
       let isValidPlacement = false;
+      const shipPosition = {
+        name: ship.name,
+        positions: []
+      }
       while (!isValidPlacement) {
         const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
         const randomDirection = ship.directions[randomDirectionIndex];
@@ -132,6 +139,7 @@ const forbiddenShipsArray = [
             isValidPlacement = false;
             break;
           }
+          shipPosition.positions.push([nextX, nextY])
         }
         if (isValidPlacement) {
           for (let i = 0; i < randomDirection.length; i++) {
@@ -144,8 +152,48 @@ const forbiddenShipsArray = [
           }
         }
       }
+      shipPositions.push(shipPosition)      
     });
-  }
+    console.log('Array with ships',shipPositions)
+
+   
+    return shipPositions;
+    // socket.emit('placeShipPositions', {playerId: socket.id, shipPositions})
+  } */
+
+  placeForbiddenShips();
+  //createAndPlaceShips();
+
+    function drawShips(shipPositions, color) {
+        shipPositions.forEach(ship => {
+            ship.positions.forEach(pos => {
+                const [x, y] = pos;
+                const square = userSquares[x + y * width];
+                square.classList.add('taken', ship.name);
+                square.dataset.ship = ship.name;
+                square.style.backgroundColor = color;
+            });
+        });
+    }
+
+    // Emit ship positions to the server
+    function emitShipPositions(shipPositions) {
+        socket.emit('placeShipPositions', shipPositions);
+    }
+
+    // Listen for ship positions from the server
+    /* socket.on('playerSetup', ({ ships, color }) => {
+       // const shipPositions = createAndPlaceShips(color);
+        drawShips(ships, color);
+       // emitShipPositions(shipPositions);
+    }); */
+
+  /* socket.on('updateShipPositions', (positions) => {
+    const { playerId, shipPositions } = positions;
+    console.log('Placerade båtar för spelare:', playerId, shipPositions);
+
+   // updateBoardWithShips(playerId, shipPositions);
+}); */
 
 
   // function generate(ship) {
@@ -180,4 +228,6 @@ const forbiddenShipsArray = [
   // }
 });
 
-
+module.exports = {
+  
+}

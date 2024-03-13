@@ -1,8 +1,9 @@
 import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-//const socket = io('http://localhost:3032');
+//const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+const socket = io('http://localhost:3032');
 //import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
+import {drawShips} from './game/game.js';
  
 //================================================
 //==================   GLOBAL   ==================
@@ -55,6 +56,15 @@ socket.on('usersConnected', (playersList) => {
   });
 });
 
+socket.on('playerSetup', ({ ships, color }) => {
+  // nya spelarens båtar
+  console.log('placerade båtar', ships, color);
+ // const shipPositions = createAndPlaceShips(ships, color)
+  drawShips(ships, color);
+  socket.emit('placeShipPositions', { playerId: socket.id, shipPositions });
+ // placePlayerShips(ships, color);
+});
+
 socket.on('disconnect', (disconnectedUser) => {
   let listItems = usersList.querySelectorAll('.username');
   listItems.forEach((listItem) => {
@@ -75,17 +85,14 @@ ships.forEach((ship) => {
 //=================================================
 //==========   ATTACKING BATTLEGROUND   ===========      in progress
 //=================================================
-socket.on('otherPlayersSetup', (otherPlayersInfo) => {
+/* socket.on('otherPlayersSetup', (otherPlayersInfo) => {
   // placera ut alla andras båtar på planen
   otherPlayersInfo.forEach(playerInfo => {
     placeOtherPlayerShips(playerInfo.ships, playerInfo.color);
   });
-});
+}); */
 
-socket.on('playerSetup', ({ ships, color }) => {
-  // nya spelarens båtar
-  placePlayerShips(ships, color);
-});
+
 
 
 //==========================

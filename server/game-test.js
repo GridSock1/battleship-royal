@@ -1,25 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const displayGrid = document.querySelector('grid-user');
-  const userGrid = document.getElementById('gridDisplay');
-  const userSquares = [];
-  const ships = document.querySelectorAll('.ship');
-  const rowboat = document.querySelector('.rowboat-container');
-  const sailboat = document.querySelector('.sailboat-container');
-  const fishingboat = document.querySelector('.fishingboat-container');
-  const pirateship = document.querySelector('.pirateship-container');
-  const width = 40;
-
-  function handleSquareClick(square) {
-    const squareId = square.dataset.id;
-    console.log('SquareID:', squareId)
-
-    if (square.classList.contains('taken')) {
-        const shipName = square.dataset.ship;
-        console.log(`Du träffade ${shipName}!`);
-    } else {
-        console.log('Du missade!');
-    }
-}
+const width = 40;
 
 const shipsArray = [
   {
@@ -63,118 +42,71 @@ const forbiddenShipsArray = [
   },
 ];
 
-  function createBoard(grid, squares) {
-    for (let i = 0; i < width * width; i++) {
-      const square = document.createElement('div');
-      square.dataset.id = i;
-      square.addEventListener('click', () => {
-        handleSquareClick(square);
-      });
-      grid.appendChild(square);
-      squares.push(square);
+function placeForbiddenShips() {
+  const forbiddenShipPositions = [];
+  forbiddenShipsArray.forEach(ship => {
+    let isValidPlacement = false;
+    while (!isValidPlacement) {
+      const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
+      const randomDirection = ship.directions[randomDirectionIndex];
+      const randomStartIndex = Math.floor(Math.random() * width * width);
+      const startX = randomStartIndex % width;
+      const startY = Math.floor(randomStartIndex / width);
+      isValidPlacement = true;
+      for (let i = 0; i < randomDirection.length; i++) {
+        const nextX = startX + randomDirection[i] % width;
+        const nextY = startY + Math.floor(randomDirection[i] / width);
+        if (nextX >= width || nextY >= width) {
+          isValidPlacement = false;
+          break;
+        }
+      }
+      if (isValidPlacement) {
+        const shipPosition = randomDirection.map(offset => {
+          const x = startX + offset % width;
+          const y = startY + Math.floor(offset / width);
+          return [x, y];
+        });
+        forbiddenShipPositions.push({ name: ship.name, positions: shipPosition });
+      }
     }
-    placeForbiddenShips();
-    createAndPlaceShips();
-  }
+  }); 
+  return forbiddenShipPositions;
+}
 
-  createBoard(userGrid, userSquares);
-
- // console.log('Board created:', userGrid, userSquares);
-  
-  function placeForbiddenShips() {
-    forbiddenShipsArray.forEach(ship => {
-      let isValidPlacement = false;
-      while (!isValidPlacement) {
-        const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
-        const randomDirection = ship.directions[randomDirectionIndex];
-        const randomStartIndex = Math.floor(Math.random() * width * width);
-        const startX = randomStartIndex % width;
-        const startY = Math.floor(randomStartIndex / width);
-        isValidPlacement = true;
-        for (let i = 0; i < randomDirection.length; i++) {
-          const nextX = startX + randomDirection[i] % width;
-          const nextY = startY + Math.floor(randomDirection[i] / width);
-          if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
-            isValidPlacement = false;
-            break;
-          }
+function createAndPlaceShips() {
+  const shipPositions = [];
+  shipsArray.forEach(ship => {
+    let isValidPlacement = false;
+    const shipPosition = {
+      name: ship.name,
+      positions: []
+    }
+    while (!isValidPlacement) {
+      const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
+      const randomDirection = ship.directions[randomDirectionIndex];
+      const randomStartIndex = Math.floor(Math.random() * width * width);
+      const startX = randomStartIndex % width;
+      const startY = Math.floor(randomStartIndex / width);
+      isValidPlacement = true;
+      for (let i = 0; i < randomDirection.length; i++) {
+        const nextX = startX + randomDirection[i] % width;
+        const nextY = startY + Math.floor(randomDirection[i] / width);
+        if (nextX >= width || nextY >= width) {
+          isValidPlacement = false;
+          break;
         }
-        if (isValidPlacement) {
-          for (let i = 0; i < randomDirection.length; i++) {
-            const nextX = startX + randomDirection[i] % width;
-            const nextY = startY + Math.floor(randomDirection[i] / width);
-            userSquares[nextX + nextY * width].classList.add('taken');
-            userSquares[nextX + nextY * width].dataset.ship = ship.name;
-          }
-        }
+        shipPosition.positions.push([nextX, nextY])
       }
-    }); 
-  }
-
-  function createAndPlaceShips(color) {
-    shipsArray.forEach(ship => {
-      let isValidPlacement = false;
-      while (!isValidPlacement) {
-        const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
-        const randomDirection = ship.directions[randomDirectionIndex];
-        const randomStartIndex = Math.floor(Math.random() * width * width);
-        const startX = randomStartIndex % width;
-        const startY = Math.floor(randomStartIndex / width);
-        isValidPlacement = true;
-        for (let i = 0; i < randomDirection.length; i++) {
-          const nextX = startX + randomDirection[i] % width;
-          const nextY = startY + Math.floor(randomDirection[i] / width);
-          if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
-            isValidPlacement = false;
-            break;
-          }
-        }
-        if (isValidPlacement) {
-          for (let i = 0; i < randomDirection.length; i++) {
-            const nextX = startX + randomDirection[i] % width;
-            const nextY = startY + Math.floor(randomDirection[i] / width);
-            const square = userSquares[nextX + nextY * width];
-            square.classList.add('taken');
-            square.style.backgroundColor = color; // Tilldela färgen till skeppet
-          }
-        }
+      if (isValidPlacement) {
+        shipPositions.push(shipPosition);
       }
-    });
-  }
-
-
-  // function generate(ship) {
-  //   let randomDirection = Math.floor(Math.random() * ship.directions.length);
-  //   let current = ship.directions[randomDirection];
-
-  //   if (randomDirection === 0) direction = 1;
-  //   if (randomDirection === 1) direction = 10;
-
-  //   let randomStart = Math.abs(
-  //     Math.floor(
-  //       Math.random() * userSquares.length -
-  //         ship.directions[0].length * direction
-  //     )
-  //   );
-
-  //   const isTaken = current.some((index) =>
-  //     userSquares[randomStart + index].classList.contains('taken')
-  //   );
-  //   const isAtRightEdge = current.some(
-  //     (index) => (randomStart + index) % width === width - 1
-  //   );
-  //   const isAtLeftEdge = current.some(
-  //     (index) => (randomStart + index) % width === 0
-  //   );
-
-  //   if (!isTaken && !isAtRightEdge && !isAtLeftEdge)
-  //     current.forEach((index) =>
-  //       userSquares[randomStart + index].classList.add('taken', ship.name)
-  //     );
-  //   else generate(ship);
-  // }
-});
+    }
+  });
+  return shipPositions;
+}
 
 module.exports = {
-  createAndPlaceShips
-}
+  createAndPlaceShips,
+  placeForbiddenShips
+};

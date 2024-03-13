@@ -10,8 +10,9 @@
   border-left: 1px solid #fff0d4;
 
   .chat-box {
-    height: 76svh;
-    width: 24rem;
+   // height: 76svh;
+    height: 600px;
+    width: 30rem;
     border: 2px solid #c4c4c4;
     border-radius: 10px;
     overflow-y: scroll;
@@ -49,7 +50,7 @@
       .received-container {
         display: flex;
         flex-direction: column;
-        max-width: 65%;
+        max-width: 70%;
 
         p {
           margin: 0;
@@ -76,7 +77,8 @@
     .input-field {
       border-radius: 10px;
       border: 2px solid #c4c4c4;
-      width: 22rem;
+      width: 28rem;
+      height: 50px;
       padding: 0.6rem;
     }
 
