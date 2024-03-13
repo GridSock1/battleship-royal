@@ -49,13 +49,14 @@
       .received-container {
         display: flex;
         flex-direction: column;
+        max-width: 65%;
 
         p {
           margin: 0;
         }
 
         .received {
-          max-width: 65%;
+          width: fit-content;
           overflow: hidden;
           font-size: larger;
           color: #3a3a3a;

@@ -72,13 +72,13 @@ io.on('connection', (socket) => {
         //createAndPlaceShips(color); //test  
         //socket.emit('shipsPlacement', { shipsArray, color }); //test
 
-        const otherPlayersInfo = getOtherPlayersInfo(socket.id);
+        /* const otherPlayersInfo = getOtherPlayersInfo(socket.id);
         // info om andras båtar och färger till nya spelaren
         socket.emit('otherPlayersSetup', otherPlayersInfo);
     
         // placera ut båtar för den nya spelaren
         const playerShips = createAndPlaceShips();
-        socket.emit('playerSetup', { ships: playerShips, color });
+        socket.emit('playerSetup', { ships: playerShips, color }); */
     
         
     });
