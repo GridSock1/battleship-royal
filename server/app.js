@@ -14,6 +14,7 @@ const io = require('socket.io')(server, {
 });
 
 const { userJoin, currentUser, userLeave } = require('./users.js');
+//const { createAndPlaceShips } = require('./game-test.js');
 
 const Message = require('./models/messageModel.js');
 
@@ -46,6 +47,8 @@ function generateColor() {
     return color; // Returnera färgen för att användas av spelaren
 }
 
+
+
 io.on('connection', (socket) => {
   console.log('A user connected', socket.id);
 
@@ -54,8 +57,8 @@ io.on('connection', (socket) => {
         playersList.push({ username, id: socket.id, color }); 
         console.log(playersList, 'player list, app');
         console.log(`${username} joined the server`);
-        io.emit('usersConnected', playersList); 
 
+        io.emit('usersConnected', playersList); 
         socket.emit('username', username);
         socket.emit('color', color);
         
@@ -64,6 +67,20 @@ io.on('connection', (socket) => {
         console.log('user', user);
 
         console.log(assignedColors, 'assignedColors app');
+
+        //====================== Battle ships ====================
+        //createAndPlaceShips(color); //test  
+        //socket.emit('shipsPlacement', { shipsArray, color }); //test
+
+        const otherPlayersInfo = getOtherPlayersInfo(socket.id);
+        // info om andras båtar och färger till nya spelaren
+        socket.emit('otherPlayersSetup', otherPlayersInfo);
+    
+        // placera ut båtar för den nya spelaren
+        const playerShips = createAndPlaceShips();
+        socket.emit('playerSetup', { ships: playerShips, color });
+    
+        
     });
 
     socket.on('disconnect', () => {

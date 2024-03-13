@@ -75,9 +75,24 @@ ships.forEach((ship) => {
 //=================================================
 //==========   ATTACKING BATTLEGROUND   ===========      in progress
 //=================================================
+socket.on('otherPlayersSetup', (otherPlayersInfo) => {
+  // placera ut alla andras båtar på planen
+  otherPlayersInfo.forEach(playerInfo => {
+    placeOtherPlayerShips(playerInfo.ships, playerInfo.color);
+  });
+});
+
+socket.on('playerSetup', ({ ships, color }) => {
+  // nya spelarens båtar
+  placePlayerShips(ships, color);
+});
+
+
+//==========================
+
 socket.on('colorChanged', (colorData) => {
   let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
-  console.log(targetDiv, 'targetDiv')
+  //console.log(targetDiv, 'targetDiv')
   if (targetDiv) {
     targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
     targetDiv.style.borderRadius = '50%';

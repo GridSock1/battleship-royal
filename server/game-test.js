@@ -54,14 +54,12 @@ const shipsArray = [
 
 const forbiddenShipsArray = [
   {
-    name: 'rubberduck',
+    name: 'rubberruck',
     directions: [[0]],
-    className: 'rubberduck-container',
   },
   {
     name: 'grandpawithkid',
     directions: [[0]],
-    className: 'grandpakid-container',
   },
 ];
 
@@ -105,10 +103,8 @@ const forbiddenShipsArray = [
           for (let i = 0; i < randomDirection.length; i++) {
             const nextX = startX + randomDirection[i] % width;
             const nextY = startY + Math.floor(randomDirection[i] / width);
-            const square = userSquares[nextX + nextY * width];
-            square.classList.add('taken');
-            square.classList.add(ship.name); 
-            square.dataset.ship = ship.name; 
+            userSquares[nextX + nextY * width].classList.add('taken');
+            userSquares[nextX + nextY * width].dataset.ship = ship.name;
           }
         }
       }
@@ -139,8 +135,7 @@ const forbiddenShipsArray = [
             const nextY = startY + Math.floor(randomDirection[i] / width);
             const square = userSquares[nextX + nextY * width];
             square.classList.add('taken');
-            userSquares[nextX + nextY * width].dataset.ship = ship.name;
-            square.style.backgroundColor = color; // Tilldela färgen till skeppet om man lyckas exportera på nå vis
+            square.style.backgroundColor = color; // Tilldela färgen till skeppet
           }
         }
       }
@@ -180,4 +175,6 @@ const forbiddenShipsArray = [
   // }
 });
 
-
+module.exports = {
+  createAndPlaceShips
+}
