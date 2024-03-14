@@ -1,4 +1,4 @@
-const width = 40;
+const width = 30;
 
 const shipsArray = [
   {
@@ -83,10 +83,6 @@ function createAndPlaceShips() {
   const shipPositions = [];
   shipsArray.forEach((ship) => {
     let isValidPlacement = false;
-    const shipPosition = {
-      name: ship.name,
-      positions: [],
-    };
     while (!isValidPlacement) {
       const randomDirectionIndex = Math.floor(
         Math.random() * ship.directions.length
@@ -96,6 +92,10 @@ function createAndPlaceShips() {
       const startX = randomStartIndex % width;
       const startY = Math.floor(randomStartIndex / width);
       isValidPlacement = true;
+      const shipPosition = {
+        name: ship.name,
+        positions: [],
+      };
       for (let i = 0; i < randomDirection.length; i++) {
         const nextX = startX + (randomDirection[i] % width);
         const nextY = startY + Math.floor(randomDirection[i] / width);
@@ -110,6 +110,15 @@ function createAndPlaceShips() {
       }
     }
   });
+
+  console.log('Generated Ship Positions:');
+  shipPositions.forEach((ship) => {
+    console.log(`Ship: ${ship.name}`);
+    ship.positions.forEach((position) => {
+      console.log(`Position: (${position[0]}, ${position[1]})`);
+    });
+  });
+
   return shipPositions;
 }
 

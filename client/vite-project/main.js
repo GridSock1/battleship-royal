@@ -158,6 +158,13 @@ socket.on('chat', (arg, sender, color) => {
   updateChat(arg, sender, color, 'received');
 });
 
+/* socket.on('chatMessage', ({ message, sender }) => {
+  const messageElement = document.createElement('li');
+  messageElement.classList.add('received');
+  messageElement.textContent = `${sender}: ${message}`;
+  chatList.appendChild(messageElement);
+}); */
+
 function updateChat(chat, sender, color) {
   let li = document.createElement('li');
   li.innerText = chat;

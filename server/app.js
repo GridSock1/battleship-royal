@@ -74,6 +74,7 @@ io.on('connection', (socket) => {
 
     const user = userJoin(socket.id, username, color);
     socket.join(user.id);
+    console.log('username', user.name);
 
     // createAndPlaceShips(user);
     const shipPositions = createAndPlaceShips(userSquares);
@@ -178,6 +179,13 @@ io.on('connection', (socket) => {
             shipPosition[1] === x
           ) {
             hit = true;
+            const shipName = ship.name;
+            const playerName = player.name;
+            io.emit(
+              'chat',
+              `Träff på ${shipName} som tillhör ${playerName}!`,
+              botName
+            );
             console.log('HITHITHIT');
             break;
           }

@@ -11,7 +11,7 @@ const rowboat = document.querySelector('.rowboat-container');
 const sailboat = document.querySelector('.sailboat-container');
 const fishingboat = document.querySelector('.fishingboat-container');
 const pirateship = document.querySelector('.pirateship-container'); */
-const width = 40;
+const width = 30;
 
 export function drawShips(shipPositions, color) {
   shipPositions.forEach((ship) => {
