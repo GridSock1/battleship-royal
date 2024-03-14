@@ -144,6 +144,8 @@ function generateColor() {
 io.on('connection', (socket) => {
   console.log('A user connected', socket.id);
 
+  players[socket.id] = { ready: false };
+
   socket.on('login', ({ username }) => {
     const color = generateColor(); // Generera en färg för användaren
 
@@ -204,6 +206,10 @@ io.on('connection', (socket) => {
     console.log('Ship positions:', JSON.stringify(user.shipPositions, null, 2));
 
     console.log(assignedColors, 'assignedColors app');
+  });
+
+  socket.on('readyButtonClicked', () => {
+    console.log('Player is ready:', socket.id);
   });
 
   socket.on('placeShipPositions', (positions) => {
