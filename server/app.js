@@ -31,6 +31,7 @@ mongoose
 
 const botName = 'QuackBot';
 let playersList = [];
+const playerPoints = {};
 
 // --- user color ---
 let availableColors = [
@@ -69,6 +70,7 @@ io.on('connection', (socket) => {
     const color = generateColor(); // Generera en färg för användaren
 
     const user = userJoin(socket.id, username, color);
+    playerPoints[user.name] = 0;
     socket.join(user.id);
     console.log('username', user.name);
 
@@ -162,12 +164,18 @@ io.on('connection', (socket) => {
             hit = true;
             const shipName = ship.name;
             const ownerName = player.name;
+            playerPoints[name] += 10;
             io.emit(
               'chat',
-              `${name} träffade ${shipName} som tillhör ${ownerName}!`,
+              `${name} träffade ${shipName} som tillhör ${ownerName} och har nu ${playerPoints[name]} poäng!`,
               console.log('Player app.js line 168', color),
               botName
             );
+
+            io.emit('updatePlayerPoints', {
+              playerName: name,
+              points: playerPoints[name],
+            });
             break;
           }
         }
@@ -177,7 +185,7 @@ io.on('connection', (socket) => {
     }
 
     io.emit('colorChanged', colorData, hit);
-    //console.log('shipPosition:', shipPosition);
+    console.log('PlayerPoints:', playerPoints);
   });
 
   socket.emit(
