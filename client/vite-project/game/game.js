@@ -63,13 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
         square.dataset.x = x;
         square.dataset.y = y;
 
-        square.dataset.id = x * width + y; // Calculate the index based on row and column
+        square.dataset.id = x * width + y;
         /*  square.addEventListener('click', () => {
           handleSquareClick(square);
         }); */
         square.addEventListener('click', () => {
-          const clickedX = parseInt(square.dataset.x); // Retrieve x-coordinate from dataset
-          const clickedY = parseInt(square.dataset.y); // Retrieve y-coordinate from dataset
+          const clickedX = parseInt(square.dataset.x);
+          const clickedY = parseInt(square.dataset.y);
           console.log('CLICK AT POSITION', clickedX, clickedY);
           socket.emit('shoot', {
             x: clickedX,

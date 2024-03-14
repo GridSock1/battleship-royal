@@ -186,7 +186,6 @@ io.on('connection', (socket) => {
               `${playerName} träffade ${shipName} som tillhör ${ownerName}!`,
               botName
             );
-            console.log('HITHITHIT');
             break;
           }
         }

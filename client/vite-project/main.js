@@ -58,13 +58,8 @@ socket.on('usersConnected', (playersList) => {
 });
 
 socket.on('playerSetup', ({ ships, color }) => {
-  // nya spelarens båtar
-  // console.log('placerade båtar', ships, color);
-  // const shipPositions = drawShips(ships, color)
   drawShips(ships, color);
   socket.emit('placeShipPositions', { playerId: socket.id, position: ships });
-  // console.log('båtpositioner', ships);
-  // placePlayerShips(ships, color);
 });
 
 socket.on('disconnect', (disconnectedUser) => {
@@ -74,6 +69,7 @@ socket.on('disconnect', (disconnectedUser) => {
       listItem.remove();
     }
   });
+  userLeave(disconnectedUser.id);
 });
 //=================================================
 //=============   BATTLESHIP COLOR   ==============      in progress
@@ -99,11 +95,29 @@ ships.forEach((ship) => {
 socket.on('colorChanged', (colorData, hit) => {
   console.log('COLORCHANGE main.js line 99');
   let targetDiv = document.querySelector(`[data-id="${colorData.id}"]`);
-  //console.log(targetDiv, 'targetDiv')
   if (targetDiv) {
-    targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
+    targetDiv.style.backgroundColor = colorData.color;
     targetDiv.style.borderRadius = '50%';
     console.log(hit, 'hit main.js line 105');
+    if (hit) {
+      targetDiv.style.position = 'relative';
+      targetDiv.style.textAlign = 'center';
+      targetDiv.style.lineHeight = targetDiv.offsetHeight + 'px';
+      targetDiv.style.fontSize = '26px';
+      targetDiv.style.fontWeight = '700';
+      // targetDiv.style.fontFamily = 'sans-serif';
+
+      var xSpan = document.createElement('span');
+
+      // Set the font family for the 'X'
+      xSpan.style.fontFamily = 'Arial'; // Replace 'Arial' with your desired font family
+
+      // Set the text content of the span to 'X'
+      xSpan.innerText = 'X';
+
+      // Append the span to the target div
+      targetDiv.appendChild(xSpan);
+    }
   }
 });
 
@@ -147,9 +161,9 @@ function sendChatMessage() {
   };
   console.log('send chat', sendMessage.value);
   console.log('sender', messageObject.sender);
-  socket.emit('chat', messageObject); // Sends message
+  socket.emit('chat', messageObject);
   updateChat(sendMessage.value, 'sent');
-  sendMessage.value = ''; // Clear input field after sending
+  sendMessage.value = '';
 }
 
 // Send message by clicking sendBtn
@@ -160,20 +174,12 @@ socket.on('chat', (arg, sender, color) => {
   updateChat(arg, sender, color, 'received');
 });
 
-/* socket.on('chatMessage', ({ message, sender }) => {
-  const messageElement = document.createElement('li');
-  messageElement.classList.add('received');
-  messageElement.textContent = `${sender}: ${message}`;
-  chatList.appendChild(messageElement);
-}); */
-
 function updateChat(chat, sender, color) {
   let li = document.createElement('li');
   li.innerText = chat;
   let div = document.createElement('div');
   let name = document.createElement('p');
 
-  //div.classList.add('li-container')
   if (sender === 'sent') {
     li.classList.add('sent');
     div.classList.add('sent-container');
