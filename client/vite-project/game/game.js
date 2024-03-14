@@ -1,14 +1,15 @@
-import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+/* import { io } from 'socket.io-client';
+const socket = io('https://goldfish-app-e6acm.ondigitalocean.app'); */
+// const socket = io('http://localhost:3032');
 
-const displayGrid = document.querySelector('grid-user');
+//const displayGrid = document.querySelector('grid-user');
 const userGrid = document.getElementById('gridDisplay');
 const userSquares = [];
-const ships = document.querySelectorAll('.ship');
+/* const ships = document.querySelectorAll('.ship');
 const rowboat = document.querySelector('.rowboat-container');
 const sailboat = document.querySelector('.sailboat-container');
 const fishingboat = document.querySelector('.fishingboat-container');
-const pirateship = document.querySelector('.pirateship-container');
+const pirateship = document.querySelector('.pirateship-container'); */
 const width = 40;
 
 export function drawShips(shipPositions, color) {
@@ -132,11 +133,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  socket.on('playerSetup', ({ ships, color }) => {
+  /* socket.on('playerSetup', ({ ships, color }) => {
     drawShips(ships, userSquares, width, color);
-  });
+  }); */
 
-  function createAndPlaceShips(ships, color) {
+  /* function createAndPlaceShips(ships, color) {
     const shipPositions = [];
     shipsArray.forEach((ship) => {
       let isValidPlacement = false;
@@ -183,10 +184,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return shipPositions;
     // socket.emit('placeShipPositions', {playerId: socket.id, shipPositions})
-  }
+  } */
 
   placeForbiddenShips();
-  createAndPlaceShips();
+  //createAndPlaceShips();
 
   /* socket.on('playerSetup', ({ ships, color }) => {
        // const shipPositions = createAndPlaceShips(color);

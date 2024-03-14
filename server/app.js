@@ -52,11 +52,11 @@ let availableColors = [
 let assignedColors = [];
 
 // --- battle ships ---
-let userShips = [];
+//let userShips = [];
 let userSquares = [];
 
-const width = 40;
-const shipsArray = [
+//const width = 40;
+/* const shipsArray = [
   {
     name: 'rowboat',
     directions: [
@@ -85,7 +85,7 @@ const shipsArray = [
       [0, width, width * 2, width * 3, width * 4],
     ],
   },
-];
+]; */
 
 // function createAndPlaceShips(user){
 //   const shipPositions = [];
@@ -144,7 +144,7 @@ function generateColor() {
 io.on('connection', (socket) => {
   console.log('A user connected', socket.id);
 
-  players[socket.id] = { ready: false };
+  //players[socket.id] = { ready: false };
 
   socket.on('login', ({ username }) => {
     const color = generateColor(); // Generera en färg för användaren
@@ -181,9 +181,6 @@ io.on('connection', (socket) => {
           ]; */
 
     playersList.push({ username, id: socket.id, color });
-    // console.log(playersList, 'player list, app');
-    // console.log(`${username} joined the server`);
-    //console.log(ships, 'ships')
 
     io.emit('usersConnected', playersList);
     socket.emit('username', username);
@@ -210,8 +207,42 @@ io.on('connection', (socket) => {
 
   socket.on('readyButtonClicked', () => {
     console.log('Player is ready:', socket.id);
+    players[socket.id].ready = true;
+
+    if (checkAllPlayersReady()) {
+      startGame();
+    }
   });
 
+  function checkAllPlayersReady() {
+    for (const playerId in players) {
+      if (!players[playerId].ready) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function startGame() {
+    console.log('Spelet startar...');
+
+    for (const playerId in players) {
+      const shipPositions = generateRandomShips();
+
+      io.to(playerId).emit('placeShips', { playerId, shipPositions });
+    }
+  }
+  //==================== FUNCTIONS ==================
+
+  /* function generateRandomPosition(gridSize, shipSize) {
+    const maxX = gridSize - shipSize;
+    const maxY = gridSize - shipSize;
+    const x = Math.floor(Math.random() * maxX);
+    const y = Math.floor(Math.random() * maxY);
+    return { x, y };
+  } */
+
+  //===============================================
   socket.on('placeShipPositions', (positions) => {
     const { playerId, position } = positions;
 
