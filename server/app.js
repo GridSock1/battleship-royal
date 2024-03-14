@@ -37,108 +37,117 @@ const botName = 'QuackBot';
 let playersList = [];
 
 // --- user color ---
-let availableColors = ['#08ff4a', '#ff08de', '#ff8308', '#ff0077', '#00e5ff', '#b300ff', '#84ab35', '#b07f6d', '#c406d1', '#adadad'];
+let availableColors = [
+  '#08ff4a',
+  '#ff08de',
+  '#ff8308',
+  '#ff0077',
+  '#00e5ff',
+  '#b300ff',
+  '#84ab35',
+  '#b07f6d',
+  '#c406d1',
+  '#adadad',
+];
 let assignedColors = [];
 
 // --- battle ships ---
-let userShips = []; 
-let userSquares = []; 
+let userShips = [];
+let userSquares = [];
 
 const width = 40;
 const shipsArray = [
-    {
-      name: 'rowboat',
-      directions: [
-        [0, 1],
-        [0, width],
-      ],
-    },
-    {
-      name: 'sailboat',
-      directions: [
-        [0, 1, 2],
-        [0, width, width * 2],
-      ],
-    },
-    {
-      name: 'fishingboat',
-      directions: [
-        [0, 1, 2, 3],
-        [0, width, width * 2, width * 3],
-      ],
-    },
-    {
-      name: 'pirateship',
-      directions: [
-        [0, 1, 2, 3, 4],
-        [0, width, width * 2, width * 3, width * 4],
-      ],
-    },  
-  ];
+  {
+    name: 'rowboat',
+    directions: [
+      [0, 1],
+      [0, width],
+    ],
+  },
+  {
+    name: 'sailboat',
+    directions: [
+      [0, 1, 2],
+      [0, width, width * 2],
+    ],
+  },
+  {
+    name: 'fishingboat',
+    directions: [
+      [0, 1, 2, 3],
+      [0, width, width * 2, width * 3],
+    ],
+  },
+  {
+    name: 'pirateship',
+    directions: [
+      [0, 1, 2, 3, 4],
+      [0, width, width * 2, width * 3, width * 4],
+    ],
+  },
+];
 
-  // function createAndPlaceShips(user){
-  //   const shipPositions = [];
-  //   shipsArray.forEach(ship => {
-  //     let isValidPlacement = false;
-  //     const shipPosition = {
-  //       name: ship.name,
-  //       positions: []
-  //     }
-  //     while (!isValidPlacement) {
-  //       const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
-  //       const randomDirection = ship.directions[randomDirectionIndex];
-  //       const randomStartIndex = Math.floor(Math.random() * width * width);
-  //       const startX = randomStartIndex % width;
-  //       const startY = Math.floor(randomStartIndex / width);
-  //       isValidPlacement = true;
-  //       for (let i = 0; i < randomDirection.length; i++) {
-  //         const nextX = startX + randomDirection[i] % width;
-  //         const nextY = startY + Math.floor(randomDirection[i] / width);
-  //         if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
-  //           isValidPlacement = false;
-  //           break;
-  //         }
-  //         shipPosition.positions.push([nextX, nextY])
-  //       }
-  //       if (isValidPlacement) {
-  //         for (let i = 0; i < randomDirection.length; i++) {
-  //           const nextX = startX + randomDirection[i] % width;
-  //           const nextY = startY + Math.floor(randomDirection[i] / width);
-  //           const square = userSquares[nextX + nextY * width];
-  //           square.classList.add('taken');
-  //           userSquares[nextX + nextY * width].dataset.ship = ship.name;
-  //           square.style.backgroundColor = user.color; // Tilldela färgen till skeppet om man lyckas exportera på nå vis
-  //         }
-  //       }
-  //     }
-  //     shipPositions.push(shipPosition)      
-  //   });
-  //   console.log('Array with ships',shipPositions)
+// function createAndPlaceShips(user){
+//   const shipPositions = [];
+//   shipsArray.forEach(ship => {
+//     let isValidPlacement = false;
+//     const shipPosition = {
+//       name: ship.name,
+//       positions: []
+//     }
+//     while (!isValidPlacement) {
+//       const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
+//       const randomDirection = ship.directions[randomDirectionIndex];
+//       const randomStartIndex = Math.floor(Math.random() * width * width);
+//       const startX = randomStartIndex % width;
+//       const startY = Math.floor(randomStartIndex / width);
+//       isValidPlacement = true;
+//       for (let i = 0; i < randomDirection.length; i++) {
+//         const nextX = startX + randomDirection[i] % width;
+//         const nextY = startY + Math.floor(randomDirection[i] / width);
+//         if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
+//           isValidPlacement = false;
+//           break;
+//         }
+//         shipPosition.positions.push([nextX, nextY])
+//       }
+//       if (isValidPlacement) {
+//         for (let i = 0; i < randomDirection.length; i++) {
+//           const nextX = startX + randomDirection[i] % width;
+//           const nextY = startY + Math.floor(randomDirection[i] / width);
+//           const square = userSquares[nextX + nextY * width];
+//           square.classList.add('taken');
+//           userSquares[nextX + nextY * width].dataset.ship = ship.name;
+//           square.style.backgroundColor = user.color; // Tilldela färgen till skeppet om man lyckas exportera på nå vis
+//         }
+//       }
+//     }
+//     shipPositions.push(shipPosition)
+//   });
+//   console.log('Array with ships',shipPositions)
 
-  //   user.shipPositions = shipPositions;
-  //   return shipPositions;
-  //   // socket.emit('placeShipPositions', {playerId: socket.id, shipPositions})
-  // }
+//   user.shipPositions = shipPositions;
+//   return shipPositions;
+//   // socket.emit('placeShipPositions', {playerId: socket.id, shipPositions})
+// }
 
-
-  // createAndPlaceShips();
+// createAndPlaceShips();
 // --- color ---
-function generateColor() {   
-    let randomColorIndex = Math.floor(Math.random() * availableColors.length);
-    const color = availableColors[randomColorIndex];
-    assignedColors.push(color); 
-    availableColors.splice(randomColorIndex, 1); 
-    return color; 
+function generateColor() {
+  let randomColorIndex = Math.floor(Math.random() * availableColors.length);
+  const color = availableColors[randomColorIndex];
+  assignedColors.push(color);
+  availableColors.splice(randomColorIndex, 1);
+  return color;
 }
-
 
 io.on('connection', (socket) => {
   console.log('A user connected', socket.id);
-  
-    socket.on('login', ({ username }) => {
-        const color = generateColor(); // Generera en färg för användaren
 
-        /* const userShips = [
+  socket.on('login', ({ username }) => {
+    const color = generateColor(); // Generera en färg för användaren
+
+    /* const userShips = [
             {
               name: 'rowboat',
               directions: [
@@ -169,59 +178,69 @@ io.on('connection', (socket) => {
             },  
           ]; */
 
+    playersList.push({ username, id: socket.id, color });
+    // console.log(playersList, 'player list, app');
+    // console.log(`${username} joined the server`);
+    //console.log(ships, 'ships')
 
-        playersList.push({ username, id: socket.id, color }); 
-        console.log(playersList, 'player list, app');
-        console.log(`${username} joined the server`);
-        //console.log(ships, 'ships')
-        
-        io.emit('usersConnected', playersList); 
-        socket.emit('username', username);
-        socket.emit('color', color);
-        
-        const user = userJoin(socket.id, username, color);
-        socket.join(user.id); 
-        
-        // createAndPlaceShips(user); 
-        const shipPositions = createAndPlaceShips(user);
-        user.addShipPositions(shipPositions)
-        console.log('user', user);       
-       
-        socket.emit('playerSetup', { ships: user.shipPositions, color: user.color });
+    io.emit('usersConnected', playersList);
+    socket.emit('username', username);
+    socket.emit('color', color);
 
-        console.log(assignedColors, 'assignedColors app');
-       
+    const user = userJoin(socket.id, username, color);
+    socket.join(user.id);
+
+    // createAndPlaceShips(user);
+    const shipPositions = createAndPlaceShips(userSquares);
+    user.addShipPositions(shipPositions);
+    console.log('user, app: line 196', user);
+
+    socket.emit('playerSetup', {
+      ships: user.shipPositions,
+      color: user.color,
+      source: 'server',
     });
 
-    socket.on('placeShipPositions', (positions) => {
-      const {playerId, shipPositions} = positions;
-      console.log('Placerade båtar nu', playerId, shipPositions)
+    console.log('Ship positions:', JSON.stringify(user.shipPositions, null, 2));
 
-      io.emit('updateShipPositions', { playerId, shipPositions });
-    })
+    console.log(assignedColors, 'assignedColors app');
+  });
 
-    socket.on('disconnect', () => {
-        const disconnectedUser = playersList.find(user => user.id === socket.id);
-        
-        if (disconnectedUser) {
-            availableColors.push(disconnectedUser.color);
-            const index = assignedColors.indexOf(disconnectedUser.color);
-            if (index !== -1) {
-                assignedColors.splice(index, 1);
-            }
-            
-            playersList = playersList.filter(user => user.id !== socket.id);
-            console.log(`${disconnectedUser.username} left the server`);
-            io.emit('userDisconnected', disconnectedUser); 
-            io.emit('usersConnected', playersList); 
-        }
-    });
+  socket.on('placeShipPositions', (positions) => {
+    const { playerId, position } = positions;
 
-    socket.on('shoot', ({ position, color}) => {
-        const colorData = { position, color } ;
-        console.log(colorData, 'colordata app js')
-        io.emit('colorChanged', colorData); 
-    })
+    if (position && Array.isArray(position)) {
+      console.log('Placerade båtar för spelarID:');
+      position.forEach((ship, index) => {
+        console.log(`Båt ${index + 1} position:`, ship.positions);
+      });
+    }
+
+    io.emit('updateShipPositions', { playerId, position });
+  });
+
+  socket.on('disconnect', () => {
+    const disconnectedUser = playersList.find((user) => user.id === socket.id);
+
+    if (disconnectedUser) {
+      availableColors.push(disconnectedUser.color);
+      const index = assignedColors.indexOf(disconnectedUser.color);
+      if (index !== -1) {
+        assignedColors.splice(index, 1);
+      }
+
+      playersList = playersList.filter((user) => user.id !== socket.id);
+      console.log(`${disconnectedUser.username} left the server`);
+      io.emit('userDisconnected', disconnectedUser);
+      io.emit('usersConnected', playersList);
+    }
+  });
+
+  socket.on('shoot', ({ position, color }) => {
+    const colorData = { position, color };
+    console.log(colorData, 'colordata app js');
+    io.emit('colorChanged', colorData);
+  });
 
   socket.emit(
     'chat',
@@ -251,4 +270,3 @@ io.on('connection', (socket) => {
 });
 
 server.listen(process.env.PORT || '3032');
-

@@ -1,72 +1,84 @@
 import { io } from 'socket.io-client';
 const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
 
-document.addEventListener('DOMContentLoaded', () => {
-  const displayGrid = document.querySelector('grid-user');
-  const userGrid = document.getElementById('gridDisplay');
-  const userSquares = [];
-  const ships = document.querySelectorAll('.ship');
-  const rowboat = document.querySelector('.rowboat-container');
-  const sailboat = document.querySelector('.sailboat-container');
-  const fishingboat = document.querySelector('.fishingboat-container');
-  const pirateship = document.querySelector('.pirateship-container');
-  const width = 40;
+const displayGrid = document.querySelector('grid-user');
+const userGrid = document.getElementById('gridDisplay');
+const userSquares = [];
+const ships = document.querySelectorAll('.ship');
+const rowboat = document.querySelector('.rowboat-container');
+const sailboat = document.querySelector('.sailboat-container');
+const fishingboat = document.querySelector('.fishingboat-container');
+const pirateship = document.querySelector('.pirateship-container');
+const width = 40;
 
-  function handleSquareClick(square) {
-    const squareId = square.dataset.id;
-    console.log('SquareID:', squareId)
-
-    if (square.classList.contains('taken')) {
-        const shipName = square.dataset.ship;
-        console.log(`Du träffade ${shipName}!`);
-    } else {
-        console.log('Du missade!');
-    }
+export function drawShips(shipPositions, color) {
+  shipPositions.forEach((ship) => {
+    ship.positions.forEach((pos) => {
+      const [x, y] = pos;
+      const square = userSquares[x + y * width];
+      square.classList.add('taken', ship.name);
+      square.dataset.ship = ship.name;
+      square.style.backgroundColor = color;
+    });
+  });
 }
 
-const shipsArray = [
-  {
-    name: 'rowboat',
-    directions: [
-      [0, 1],
-      [0, width],
-    ],
-  },
-  {
-    name: 'sailboat',
-    directions: [
-      [0, 1, 2],
-      [0, width, width * 2],
-    ],
-  },
-  {
-    name: 'fishingboat',
-    directions: [
-      [0, 1, 2, 3],
-      [0, width, width * 2, width * 3],
-    ],
-  },
-  {
-    name: 'pirateship',
-    directions: [
-      [0, 1, 2, 3, 4],
-      [0, width, width * 2, width * 3, width * 4],
-    ],
-  },  
-];
+document.addEventListener('DOMContentLoaded', () => {
+  function handleSquareClick(square) {
+    const squareId = square.dataset.id;
+    console.log('SquareID:', squareId);
 
-const forbiddenShipsArray = [
-  {
-    name: 'rubberduck',
-    directions: [[0]],
-    className: 'rubberduck-container',
-  },
-  {
-    name: 'grandpawithkid',
-    directions: [[0]],
-    className: 'grandpakid-container',
-  },
-];
+    if (square.classList.contains('taken')) {
+      const shipName = square.dataset.ship;
+      console.log(`Du träffade ${shipName}!`);
+    } else {
+      console.log('Du missade!');
+    }
+  }
+
+  const shipsArray = [
+    {
+      name: 'rowboat',
+      directions: [
+        [0, 1],
+        [0, width],
+      ],
+    },
+    {
+      name: 'sailboat',
+      directions: [
+        [0, 1, 2],
+        [0, width, width * 2],
+      ],
+    },
+    {
+      name: 'fishingboat',
+      directions: [
+        [0, 1, 2, 3],
+        [0, width, width * 2, width * 3],
+      ],
+    },
+    {
+      name: 'pirateship',
+      directions: [
+        [0, 1, 2, 3, 4],
+        [0, width, width * 2, width * 3, width * 4],
+      ],
+    },
+  ];
+
+  const forbiddenShipsArray = [
+    {
+      name: 'rubberduck',
+      directions: [[0]],
+      className: 'rubberduck-container',
+    },
+    {
+      name: 'grandpawithkid',
+      directions: [[0]],
+      className: 'grandpakid-container',
+    },
+  ];
 
   function createBoard(grid, squares) {
     for (let i = 0; i < width * width; i++) {
@@ -79,71 +91,84 @@ const forbiddenShipsArray = [
       squares.push(square);
     }
   }
-  
-  createBoard(userGrid, userSquares);
-  
 
- // console.log('Board created:', userGrid, userSquares);
-  
+  createBoard(userGrid, userSquares);
+
   function placeForbiddenShips() {
-    forbiddenShipsArray.forEach(ship => {
+    forbiddenShipsArray.forEach((ship) => {
       let isValidPlacement = false;
       while (!isValidPlacement) {
-        const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
+        const randomDirectionIndex = Math.floor(
+          Math.random() * ship.directions.length
+        );
         const randomDirection = ship.directions[randomDirectionIndex];
         const randomStartIndex = Math.floor(Math.random() * width * width);
         const startX = randomStartIndex % width;
         const startY = Math.floor(randomStartIndex / width);
         isValidPlacement = true;
         for (let i = 0; i < randomDirection.length; i++) {
-          const nextX = startX + randomDirection[i] % width;
+          const nextX = startX + (randomDirection[i] % width);
           const nextY = startY + Math.floor(randomDirection[i] / width);
-          if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
+          if (
+            nextX >= width ||
+            nextY >= width ||
+            userSquares[nextX + nextY * width].classList.contains('taken')
+          ) {
             isValidPlacement = false;
             break;
           }
         }
         if (isValidPlacement) {
           for (let i = 0; i < randomDirection.length; i++) {
-            const nextX = startX + randomDirection[i] % width;
+            const nextX = startX + (randomDirection[i] % width);
             const nextY = startY + Math.floor(randomDirection[i] / width);
             const square = userSquares[nextX + nextY * width];
             square.classList.add('taken');
-            square.classList.add(ship.name); 
-            square.dataset.ship = ship.name; 
+            square.classList.add(ship.name);
+            square.dataset.ship = ship.name;
           }
         }
       }
-    }); 
+    });
   }
 
-  /* function createAndPlaceShips(ships, color){
+  socket.on('playerSetup', ({ ships, color }) => {
+    drawShips(ships, userSquares, width, color);
+  });
+
+  function createAndPlaceShips(ships, color) {
     const shipPositions = [];
-    shipsArray.forEach(ship => {
+    shipsArray.forEach((ship) => {
       let isValidPlacement = false;
       const shipPosition = {
         name: ship.name,
-        positions: []
-      }
+        positions: [],
+      };
       while (!isValidPlacement) {
-        const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
+        const randomDirectionIndex = Math.floor(
+          Math.random() * ship.directions.length
+        );
         const randomDirection = ship.directions[randomDirectionIndex];
         const randomStartIndex = Math.floor(Math.random() * width * width);
         const startX = randomStartIndex % width;
         const startY = Math.floor(randomStartIndex / width);
         isValidPlacement = true;
         for (let i = 0; i < randomDirection.length; i++) {
-          const nextX = startX + randomDirection[i] % width;
+          const nextX = startX + (randomDirection[i] % width);
           const nextY = startY + Math.floor(randomDirection[i] / width);
-          if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
+          if (
+            nextX >= width ||
+            nextY >= width ||
+            userSquares[nextX + nextY * width].classList.contains('taken')
+          ) {
             isValidPlacement = false;
             break;
           }
-          shipPosition.positions.push([nextX, nextY])
+          shipPosition.positions.push([nextX, nextY]);
         }
         if (isValidPlacement) {
           for (let i = 0; i < randomDirection.length; i++) {
-            const nextX = startX + randomDirection[i] % width;
+            const nextX = startX + (randomDirection[i] % width);
             const nextY = startY + Math.floor(randomDirection[i] / width);
             const square = userSquares[nextX + nextY * width];
             square.classList.add('taken');
@@ -152,37 +177,18 @@ const forbiddenShipsArray = [
           }
         }
       }
-      shipPositions.push(shipPosition)      
+      shipPositions.push(shipPosition);
     });
-    console.log('Array with ships',shipPositions)
+    console.log('Array with ships', shipPositions);
 
-   
     return shipPositions;
     // socket.emit('placeShipPositions', {playerId: socket.id, shipPositions})
-  } */
+  }
 
   placeForbiddenShips();
-  //createAndPlaceShips();
+  createAndPlaceShips();
 
-    function drawShips(shipPositions, color) {
-        shipPositions.forEach(ship => {
-            ship.positions.forEach(pos => {
-                const [x, y] = pos;
-                const square = userSquares[x + y * width];
-                square.classList.add('taken', ship.name);
-                square.dataset.ship = ship.name;
-                square.style.backgroundColor = color;
-            });
-        });
-    }
-
-    // Emit ship positions to the server
-    function emitShipPositions(shipPositions) {
-        socket.emit('placeShipPositions', shipPositions);
-    }
-
-    // Listen for ship positions from the server
-    /* socket.on('playerSetup', ({ ships, color }) => {
+  /* socket.on('playerSetup', ({ ships, color }) => {
        // const shipPositions = createAndPlaceShips(color);
         drawShips(ships, color);
        // emitShipPositions(shipPositions);
@@ -194,7 +200,6 @@ const forbiddenShipsArray = [
 
    // updateBoardWithShips(playerId, shipPositions);
 }); */
-
 
   // function generate(ship) {
   //   let randomDirection = Math.floor(Math.random() * ship.directions.length);
@@ -226,8 +231,14 @@ const forbiddenShipsArray = [
   //     );
   //   else generate(ship);
   // }
+
+  socket.on('playerSetup', ({ ships, color }) => {
+    drawShips(ships, userSquares, width, color);
+  });
 });
 
-module.exports = {
-  
+// export { drawShips };
+
+function emitShipPositions(shipPositions) {
+  socket.emit('placeShipPositions', shipPositions);
 }

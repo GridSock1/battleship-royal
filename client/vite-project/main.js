@@ -3,8 +3,8 @@ import { io } from 'socket.io-client';
 const socket = io('http://localhost:3032');
 //import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
-import {drawShips} from './game/game.js';
- 
+import { drawShips } from './game/game.js';
+
 //================================================
 //==================   GLOBAL   ==================
 //================================================
@@ -59,10 +59,11 @@ socket.on('usersConnected', (playersList) => {
 socket.on('playerSetup', ({ ships, color }) => {
   // nya spelarens båtar
   console.log('placerade båtar', ships, color);
- // const shipPositions = createAndPlaceShips(ships, color)
+  // const shipPositions = drawShips(ships, color)
   drawShips(ships, color);
-  socket.emit('placeShipPositions', { playerId: socket.id, shipPositions });
- // placePlayerShips(ships, color);
+  socket.emit('placeShipPositions', { playerId: socket.id, position: ships });
+  console.log('båtpositioner', ships);
+  // placePlayerShips(ships, color);
 });
 
 socket.on('disconnect', (disconnectedUser) => {
@@ -91,9 +92,6 @@ ships.forEach((ship) => {
     placeOtherPlayerShips(playerInfo.ships, playerInfo.color);
   });
 }); */
-
-
-
 
 //==========================
 
@@ -125,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //=================================================
 socket.on('username', (username) => {
   myName = username;
-})
+});
 
 // Send message by pressing ENTER on keyboard
 sendMessage.addEventListener('keypress', (event) => {
