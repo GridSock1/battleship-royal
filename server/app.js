@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
   //players[socket.id] = { ready: false };
 
   socket.on('login', ({ username }) => {
-    const color = generateColor(); // Generera en färg för användaren
+    const color = generateColor();
 
     const user = userJoin(socket.id, username, color);
     playerPoints[user.name] = 0;
@@ -116,7 +116,6 @@ io.on('connection', (socket) => {
     console.log('Spelet startar...');
 
     for (const player of allPlayerShips) {
-      // const shipPositions = generateRandomShips();
       const shipPositions = createAndPlaceShips();
 
       io.to(player.id).emit('placeShips', { playerId, shipPositions });
@@ -153,21 +152,21 @@ io.on('connection', (socket) => {
   });
 
   const clickedSquares = new Set();
+  let playersLost = [];
 
   socket.on('shoot', ({ x, y, id, color, name }) => {
+    if (hasPlayerLost(name)) {
+      socket.emit('invalidShot');
+      return;
+    }
     const colorData = { x, y, id, color, playerName: name };
-    // const squareId = generateSquareId(x, y);
-
-    console.log('squareId:', id);
 
     if (clickedSquares.has(id)) {
-      // Square already clicked, ignore the shot
       socket.emit('invalidShot');
       return;
     }
 
     clickedSquares.add(id);
-
     io.emit('squareClicked', id);
 
     let hit = false;
@@ -199,6 +198,10 @@ io.on('connection', (socket) => {
                   botName
                 );
               }
+              io.emit('updatePlayerPoints', {
+                playerName: name,
+                points: playerPoints[name],
+              });
             } else {
               if (name === ownerName) {
                 playerPoints[name] -= 10;
@@ -216,11 +219,11 @@ io.on('connection', (socket) => {
                 );
               }
             }
-
-            io.emit('updatePlayerPoints', {
-              playerName: name,
-              points: playerPoints[name],
-            });
+            const allSunk = player.shipPositions.every((ship) => ship.isSunk);
+            if (allSunk && !playersLost.includes(player.name)) {
+              playersLost.push(player.name);
+              io.emit('chat', `${name} förlorade alla sina skepp!`, botName);
+            }
             break;
           }
         }
@@ -231,12 +234,12 @@ io.on('connection', (socket) => {
 
     io.emit('colorChanged', colorData, hit);
     io.emit('squareId', id);
+
     console.log('PlayerPoints:', playerPoints);
   });
 
-  function generateSquareId(x, y) {
-    // Concatenate the x and y coordinates to form a unique identifier
-    return `${x}-${y}`;
+  function hasPlayerLost(playerName) {
+    return playersLost.includes(playerName);
   }
 
   socket.emit(
