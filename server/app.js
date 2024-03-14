@@ -51,6 +51,7 @@ let assignedColors = [];
 // --- battle ships ---
 //let userShips = [];
 let userSquares = [];
+const clickedSquares = new Set();
 
 // --- color ---
 function generateColor() {
@@ -152,8 +153,24 @@ io.on('connection', (socket) => {
     }
   });
 
+  const clickedSquares = new Set();
+
   socket.on('shoot', ({ x, y, id, color, name }) => {
     const colorData = { x, y, id, color, playerName: name };
+    const squareId = generateSquareId(x, y);
+
+    console.log('squareId:', squareId);
+
+    if (clickedSquares.has(squareId)) {
+      // Square already clicked, ignore the shot
+      socket.emit('invalidShot');
+      return;
+    }
+
+    clickedSquares.add(squareId);
+
+    io.emit('squareClicked', squareId);
+
     let hit = false;
 
     for (const player of playersList) {
@@ -214,8 +231,14 @@ io.on('connection', (socket) => {
     }
 
     io.emit('colorChanged', colorData, hit);
+    io.emit('squareId', squareId);
     console.log('PlayerPoints:', playerPoints);
   });
+
+  function generateSquareId(x, y) {
+    // Concatenate the x and y coordinates to form a unique identifier
+    return `${x}-${y}`;
+  }
 
   socket.emit(
     'chat',
