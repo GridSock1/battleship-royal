@@ -159,9 +159,24 @@ io.on('connection', (socket) => {
       socket.emit('invalidShot');
       return;
     }
+
     const colorData = { x, y, id, color, playerName: name };
 
     if (clickedSquares.has(id)) {
+      socket.emit('invalidShot');
+      return;
+    }
+
+    // Add a check to see if the player has lost all ships before processing the shot
+    let allShipsSunk = true;
+    for (const player of playersList) {
+      if (player.name === name) {
+        allShipsSunk = player.shipPositions.every((ship) => ship.isSunk);
+        break;
+      }
+    }
+
+    if (allShipsSunk) {
       socket.emit('invalidShot');
       return;
     }
