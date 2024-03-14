@@ -82,13 +82,13 @@ io.on('connection', (socket) => {
     console.log('user, app: line 196', user);
 
     socket.emit('playerSetup', {
+      username: user.name,
       ships: user.shipPositions,
       color: user.color,
       source: 'server',
     });
 
     playersList.push(user);
-
     io.emit('usersConnected', playersList);
     socket.emit('username', username);
     socket.emit('color', color);
@@ -165,8 +165,8 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('shoot', ({ x, y, color }) => {
-    const colorData = { color };
+  socket.on('shoot', ({ x, y, id, color, playerName }) => {
+    const colorData = { x, y, id, color };
     let hit = false;
 
     for (const player of playersList) {
@@ -180,10 +180,10 @@ io.on('connection', (socket) => {
           ) {
             hit = true;
             const shipName = ship.name;
-            const playerName = player.name;
+            const ownerName = player.name;
             io.emit(
               'chat',
-              `Träff på ${shipName} som tillhör ${playerName}!`,
+              `${playerName} träffade ${shipName} som tillhör ${ownerName}!`,
               botName
             );
             console.log('HITHITHIT');

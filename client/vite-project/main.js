@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-// const socket = io('http://localhost:3032');
+// const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+const socket = io('http://localhost:3032');
 //import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 import { drawShips } from './game/game.js';
@@ -25,6 +25,7 @@ let myColor = 'pink';
 
 socket.on('color', (color) => {
   myColor = color;
+  localStorage.setItem('MyColor', myColor);
 });
 
 //================================================
@@ -47,11 +48,11 @@ function addPlayer() {
 socket.on('usersConnected', (playersList) => {
   usersList.innerHTML = '';
 
-  playersList.forEach((user) => {
+  playersList.forEach((player) => {
     let listItem = document.createElement('li');
     listItem.classList.add('username');
-    listItem.textContent = user.username;
-    listItem.style.backgroundColor = user.color;
+    listItem.textContent = player.username;
+    listItem.style.backgroundColor = player.color;
     usersList.appendChild(listItem);
   });
 });
@@ -97,7 +98,7 @@ ships.forEach((ship) => {
 
 socket.on('colorChanged', (colorData, hit) => {
   console.log('COLORCHANGE main.js line 99');
-  let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
+  let targetDiv = document.querySelector(`[data-id="${colorData.id}"]`);
   //console.log(targetDiv, 'targetDiv')
   if (targetDiv) {
     targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
@@ -115,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         div.style.borderRadius = '50%';
 
         //socket.emit('shoot', { position: i, color: myColor });
+        // socket.emit('shoot', { x: i % 40, y: Math.floor(i / 40), color: myColor, playerName: username });
         console.log('COLORED main.js line 118');
       });
     }

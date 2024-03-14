@@ -13,6 +13,10 @@ const fishingboat = document.querySelector('.fishingboat-container');
 const pirateship = document.querySelector('.pirateship-container'); */
 const width = 30;
 
+socket.on('color', (color) => {
+  myColor = color;
+});
+
 export function drawShips(shipPositions, color) {
   shipPositions.forEach((ship) => {
     ship.positions.forEach((pos) => {
@@ -67,7 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const clickedX = parseInt(square.dataset.x); // Retrieve x-coordinate from dataset
           const clickedY = parseInt(square.dataset.y); // Retrieve y-coordinate from dataset
           console.log('CLICK AT POSITION', clickedX, clickedY);
-          socket.emit('shoot', { x: clickedX, y: clickedY });
+          socket.emit('shoot', {
+            x: clickedX,
+            y: clickedY,
+            id: square.dataset.id,
+            color: localStorage.getItem('MyColor'),
+          });
         });
         grid.appendChild(square);
         squares.push(square);
@@ -75,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  createBoard(userGrid, userSquares, width);
   // function createBoard(grid, squares) {
   //   for (let i = 0; i < width * width; i++) {
   //     const square = document.createElement('div');
@@ -91,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // }
 
   // createBoard(userGrid, userSquares);
-  createBoard(userGrid, userSquares, width);
 
   function placeForbiddenShips() {
     forbiddenShipsArray.forEach((ship) => {
