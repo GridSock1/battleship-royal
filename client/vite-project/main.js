@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
-const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
-// const socket = io('http://localhost:3032');
+// const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
+const socket = io('http://localhost:3032');
 //import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 import { drawShips } from './game/game.js';
@@ -47,22 +47,22 @@ function addPlayer() {
 socket.on('usersConnected', (playersList) => {
   usersList.innerHTML = '';
 
-  playersList.forEach((player) => {
+  playersList.forEach((user) => {
     let listItem = document.createElement('li');
     listItem.classList.add('username');
-    listItem.textContent = player.username;
-    listItem.style.backgroundColor = player.color;
+    listItem.textContent = user.username;
+    listItem.style.backgroundColor = user.color;
     usersList.appendChild(listItem);
   });
 });
 
 socket.on('playerSetup', ({ ships, color }) => {
   // nya spelarens båtar
-  console.log('placerade båtar', ships, color);
+  // console.log('placerade båtar', ships, color);
   // const shipPositions = drawShips(ships, color)
   drawShips(ships, color);
   socket.emit('placeShipPositions', { playerId: socket.id, position: ships });
-  console.log('båtpositioner', ships);
+  // console.log('båtpositioner', ships);
   // placePlayerShips(ships, color);
 });
 
@@ -95,12 +95,14 @@ ships.forEach((ship) => {
 
 //==========================
 
-socket.on('colorChanged', (colorData) => {
+socket.on('colorChanged', (colorData, hit) => {
+  console.log('COLORCHANGE main.js line 99');
   let targetDiv = document.querySelector(`[data-id="${colorData.position}"]`);
   //console.log(targetDiv, 'targetDiv')
   if (targetDiv) {
     targetDiv.style.backgroundColor = colorData.color; //lägga till en div istället?
     targetDiv.style.borderRadius = '50%';
+    console.log(hit, 'hit main.js line 105');
   }
 });
 
@@ -112,7 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         div.style.backgroundColor = myColor; //ändra till spelarens färg
         div.style.borderRadius = '50%';
 
-        socket.emit('shoot', { position: i, color: myColor });
+        //socket.emit('shoot', { position: i, color: myColor });
+        console.log('COLORED main.js line 118');
       });
     }
   }

@@ -55,83 +55,6 @@ let assignedColors = [];
 //let userShips = [];
 let userSquares = [];
 
-//const width = 40;
-/* const shipsArray = [
-  {
-    name: 'rowboat',
-    directions: [
-      [0, 1],
-      [0, width],
-    ],
-  },
-  {
-    name: 'sailboat',
-    directions: [
-      [0, 1, 2],
-      [0, width, width * 2],
-    ],
-  },
-  {
-    name: 'fishingboat',
-    directions: [
-      [0, 1, 2, 3],
-      [0, width, width * 2, width * 3],
-    ],
-  },
-  {
-    name: 'pirateship',
-    directions: [
-      [0, 1, 2, 3, 4],
-      [0, width, width * 2, width * 3, width * 4],
-    ],
-  },
-]; */
-
-// function createAndPlaceShips(user){
-//   const shipPositions = [];
-//   shipsArray.forEach(ship => {
-//     let isValidPlacement = false;
-//     const shipPosition = {
-//       name: ship.name,
-//       positions: []
-//     }
-//     while (!isValidPlacement) {
-//       const randomDirectionIndex = Math.floor(Math.random() * ship.directions.length);
-//       const randomDirection = ship.directions[randomDirectionIndex];
-//       const randomStartIndex = Math.floor(Math.random() * width * width);
-//       const startX = randomStartIndex % width;
-//       const startY = Math.floor(randomStartIndex / width);
-//       isValidPlacement = true;
-//       for (let i = 0; i < randomDirection.length; i++) {
-//         const nextX = startX + randomDirection[i] % width;
-//         const nextY = startY + Math.floor(randomDirection[i] / width);
-//         if (nextX >= width || nextY >= width || userSquares[nextX + nextY * width].classList.contains('taken')) {
-//           isValidPlacement = false;
-//           break;
-//         }
-//         shipPosition.positions.push([nextX, nextY])
-//       }
-//       if (isValidPlacement) {
-//         for (let i = 0; i < randomDirection.length; i++) {
-//           const nextX = startX + randomDirection[i] % width;
-//           const nextY = startY + Math.floor(randomDirection[i] / width);
-//           const square = userSquares[nextX + nextY * width];
-//           square.classList.add('taken');
-//           userSquares[nextX + nextY * width].dataset.ship = ship.name;
-//           square.style.backgroundColor = user.color; // Tilldela färgen till skeppet om man lyckas exportera på nå vis
-//         }
-//       }
-//     }
-//     shipPositions.push(shipPosition)
-//   });
-//   console.log('Array with ships',shipPositions)
-
-//   user.shipPositions = shipPositions;
-//   return shipPositions;
-//   // socket.emit('placeShipPositions', {playerId: socket.id, shipPositions})
-// }
-
-// createAndPlaceShips();
 // --- color ---
 function generateColor() {
   let randomColorIndex = Math.floor(Math.random() * availableColors.length);
@@ -149,43 +72,6 @@ io.on('connection', (socket) => {
   socket.on('login', ({ username }) => {
     const color = generateColor(); // Generera en färg för användaren
 
-    /* const userShips = [
-            {
-              name: 'rowboat',
-              directions: [
-                [0, 1],
-                [0, width],
-              ],
-            },
-            {
-              name: 'sailboat',
-              directions: [
-                [0, 1, 2],
-                [0, width, width * 2],
-              ],
-            },
-            {
-              name: 'fishingboat',
-              directions: [
-                [0, 1, 2, 3],
-                [0, width, width * 2, width * 3],
-              ],
-            },
-            {
-              name: 'pirateship',
-              directions: [
-                [0, 1, 2, 3, 4],
-                [0, width, width * 2, width * 3, width * 4],
-              ],
-            },  
-          ]; */
-
-    playersList.push({ username, id: socket.id, color });
-
-    io.emit('usersConnected', playersList);
-    socket.emit('username', username);
-    socket.emit('color', color);
-
     const user = userJoin(socket.id, username, color);
     socket.join(user.id);
 
@@ -200,9 +86,13 @@ io.on('connection', (socket) => {
       source: 'server',
     });
 
-    console.log('Ship positions:', JSON.stringify(user.shipPositions, null, 2));
+    playersList.push(user);
 
-    console.log(assignedColors, 'assignedColors app');
+    io.emit('usersConnected', playersList);
+    socket.emit('username', username);
+    socket.emit('color', color);
+
+    console.log('Players list', playersList);
   });
 
   socket.on('readyButtonClicked', () => {
@@ -223,36 +113,37 @@ io.on('connection', (socket) => {
     return true;
   }
 
+  /* function isSquareOccupied(squareId) {
+    for (const player of playersList) {
+      for (const shipPosition of player.shipPositions) {
+        if (shipPosition.includes(squareId)) {
+          return true; // Square is occupied by a ship
+        }
+      }
+    }
+    return false; // Square is not occupied by any ship
+  } */
+
   function startGame() {
     console.log('Spelet startar...');
 
-    for (const playerId in players) {
-      const shipPositions = generateRandomShips();
+    for (const player of allPlayerShips) {
+      // const shipPositions = generateRandomShips();
+      const shipPositions = createAndPlaceShips();
 
-      io.to(playerId).emit('placeShips', { playerId, shipPositions });
+      io.to(player.id).emit('placeShips', { playerId, shipPositions });
     }
   }
-  //==================== FUNCTIONS ==================
 
-  /* function generateRandomPosition(gridSize, shipSize) {
-    const maxX = gridSize - shipSize;
-    const maxY = gridSize - shipSize;
-    const x = Math.floor(Math.random() * maxX);
-    const y = Math.floor(Math.random() * maxY);
-    return { x, y };
-  } */
-
-  //===============================================
   socket.on('placeShipPositions', (positions) => {
     const { playerId, position } = positions;
 
     if (position && Array.isArray(position)) {
-      console.log('Placerade båtar för spelarID:');
+      // console.log('Placerade båtar för spelarID:');
       position.forEach((ship, index) => {
-        console.log(`Båt ${index + 1} position:`, ship.positions);
+        // console.log(`Båt ${index + 1} position:`, ship.positions);
       });
     }
-
     io.emit('updateShipPositions', { playerId, position });
   });
 
@@ -273,10 +164,35 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('shoot', ({ position, color }) => {
-    const colorData = { position, color };
-    console.log(colorData, 'colordata app js');
-    io.emit('colorChanged', colorData);
+  socket.on('shoot', ({ x, y, color }) => {
+    const colorData = { color };
+    let hit = false;
+
+    for (const player of playersList) {
+      for (const ship of player.shipPositions) {
+        for (const shipPosition of ship.positions) {
+          console.log(shipPosition, 'APP line 174');
+          if (
+            // shipPosition[0] === parseInt(position)
+            shipPosition[0] === y &&
+            shipPosition[1] === x
+          ) {
+            hit = true;
+            console.log('HITHITHIT');
+            break;
+          }
+        }
+        if (hit) break;
+      }
+      if (hit) break;
+    }
+
+    io.emit('colorChanged', colorData, hit);
+    console.log(colorData, 'colordata app js 190');
+    console.log(hit, 'colordata app js');
+    console.log('x:', x);
+    console.log('y:', y);
+    //console.log('shipPosition:', shipPosition);
   });
 
   socket.emit(
