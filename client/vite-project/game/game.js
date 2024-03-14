@@ -38,27 +38,34 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   socket.on('squareId', (squareId) => {
-    // Handle the received squareId here
     console.log('Received squareId:', squareId);
 
-    // Find the square element with the corresponding ID
     const square = document.querySelector(`[data-id='${squareId}']`);
     if (square) {
-      // Remove the click event listener from the square
       square.removeEventListener('click', shootHandler);
-
-      // You can perform any additional UI updates here if needed
     }
   });
 
   socket.on('squareClicked', (squareId) => {
-    // Find the square element with the corresponding ID
+    console.log('Square clicked ID:', squareId);
     const square = document.querySelector(`[data-id='${squareId}']`);
     if (square) {
-      // Disable the square (remove click event listener or add disabled attribute)
       square.classList.add('disabled');
     }
   });
+
+  function shootHandler(event) {
+    const square = event.target;
+    const clickedX = parseInt(square.dataset.x);
+    const clickedY = parseInt(square.dataset.y);
+    socket.emit('shoot', {
+      x: clickedX,
+      y: clickedY,
+      id: square.dataset.id,
+      color: localStorage.getItem('MyColor'),
+      name: localStorage.getItem('MyName'),
+    });
+  }
 
   function createBoard(grid, squares, width) {
     for (let x = 0; x < width; x++) {
@@ -68,29 +75,45 @@ document.addEventListener('DOMContentLoaded', () => {
         square.dataset.y = y;
         square.dataset.id = x * width + y;
 
-        square.addEventListener('click', function shootHandler() {
-          const clickedX = parseInt(square.dataset.x);
-          const clickedY = parseInt(square.dataset.y);
-          socket.emit('shoot', {
-            x: clickedX,
-            y: clickedY,
-            id: square.dataset.id,
-            color: localStorage.getItem('MyColor'),
-            name: localStorage.getItem('MyName'),
-          });
-
-          // Immediately remove the click event listener from the square
-          square.removeEventListener('click', shootHandler);
-
-          // Emit an event to inform all clients to deactivate the square
-          socket.emit('deactivateSquare', square.dataset.id);
-        });
+        square.addEventListener('click', shootHandler);
 
         grid.appendChild(square);
         squares.push(square);
       }
     }
   }
+
+  // function createBoard(grid, squares, width) {
+  //   for (let x = 0; x < width; x++) {
+  //     for (let y = 0; y < width; y++) {
+  //       const square = document.createElement('div');
+  //       square.dataset.x = x;
+  //       square.dataset.y = y;
+  //       square.dataset.id = x * width + y;
+
+  //       square.addEventListener('click', function shootHandler() {
+  //         const clickedX = parseInt(square.dataset.x);
+  //         const clickedY = parseInt(square.dataset.y);
+  //         socket.emit('shoot', {
+  //           x: clickedX,
+  //           y: clickedY,
+  //           id: square.dataset.id,
+  //           color: localStorage.getItem('MyColor'),
+  //           name: localStorage.getItem('MyName'),
+  //         });
+
+  //         // Immediately remove the click event listener from the square
+  //         square.removeEventListener('click', shootHandler);
+
+  //         // Emit an event to inform all clients to deactivate the square
+  //         socket.emit('deactivateSquare', square.dataset.id);
+  //       });
+
+  //       grid.appendChild(square);
+  //       squares.push(square);
+  //     }
+  //   }
+  // }
 
   createBoard(userGrid, userSquares, width);
 
