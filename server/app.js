@@ -29,10 +29,6 @@ mongoose
     console.error('Error connecting to MongoDB:', error);
   });
 
-/* app.get('/test', (req, res) => {
-  res.send('<h1>Socket</h1>');
-}); */
-
 const botName = 'QuackBot';
 let playersList = [];
 
@@ -114,17 +110,6 @@ io.on('connection', (socket) => {
     return true;
   }
 
-  /* function isSquareOccupied(squareId) {
-    for (const player of playersList) {
-      for (const shipPosition of player.shipPositions) {
-        if (shipPosition.includes(squareId)) {
-          return true; // Square is occupied by a ship
-        }
-      }
-    }
-    return false; // Square is not occupied by any ship
-  } */
-
   function startGame() {
     console.log('Spelet startar...');
 
@@ -165,25 +150,22 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('shoot', ({ x, y, id, color, playerName }) => {
-    const colorData = { x, y, id, color };
+  socket.on('shoot', ({ x, y, id, color, name }) => {
+    const colorData = { x, y, id, color, playerName: name };
     let hit = false;
 
     for (const player of playersList) {
       for (const ship of player.shipPositions) {
         for (const shipPosition of ship.positions) {
           console.log(shipPosition, 'APP line 174');
-          if (
-            // shipPosition[0] === parseInt(position)
-            shipPosition[0] === y &&
-            shipPosition[1] === x
-          ) {
+          if (shipPosition[0] === y && shipPosition[1] === x) {
             hit = true;
             const shipName = ship.name;
             const ownerName = player.name;
             io.emit(
               'chat',
-              `${playerName} träffade ${shipName} som tillhör ${ownerName}!`,
+              `${name} träffade ${shipName} som tillhör ${ownerName}!`,
+              console.log('Player app.js line 168', color),
               botName
             );
             break;
@@ -195,10 +177,6 @@ io.on('connection', (socket) => {
     }
 
     io.emit('colorChanged', colorData, hit);
-    console.log(colorData, 'colordata app js 190');
-    console.log(hit, 'colordata app js');
-    console.log('x:', x);
-    console.log('y:', y);
     //console.log('shipPosition:', shipPosition);
   });
 

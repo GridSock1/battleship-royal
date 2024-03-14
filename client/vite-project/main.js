@@ -51,7 +51,7 @@ socket.on('usersConnected', (playersList) => {
   playersList.forEach((player) => {
     let listItem = document.createElement('li');
     listItem.classList.add('username');
-    listItem.textContent = player.username;
+    listItem.textContent = player.name;
     listItem.style.backgroundColor = player.color;
     usersList.appendChild(listItem);
   });
@@ -69,7 +69,6 @@ socket.on('disconnect', (disconnectedUser) => {
       listItem.remove();
     }
   });
-  userLeave(disconnectedUser.id);
 });
 //=================================================
 //=============   BATTLESHIP COLOR   ==============      in progress
@@ -105,43 +104,33 @@ socket.on('colorChanged', (colorData, hit) => {
       targetDiv.style.lineHeight = targetDiv.offsetHeight + 'px';
       targetDiv.style.fontSize = '26px';
       targetDiv.style.fontWeight = '700';
-      // targetDiv.style.fontFamily = 'sans-serif';
-
-      var xSpan = document.createElement('span');
-
-      // Set the font family for the 'X'
-      xSpan.style.fontFamily = 'Arial'; // Replace 'Arial' with your desired font family
-
-      // Set the text content of the span to 'X'
-      xSpan.innerText = 'X';
-
-      // Append the span to the target div
-      targetDiv.appendChild(xSpan);
+      targetDiv.innerText = 'X';
     }
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  for (let i = 0; i < 1600; i++) {
-    let div = document.querySelector(`[data-id="${i}"]`);
-    if (div) {
-      div.addEventListener('click', () => {
-        div.style.backgroundColor = myColor; //ändra till spelarens färg
-        div.style.borderRadius = '50%';
+// document.addEventListener('DOMContentLoaded', () => {
+//   for (let i = 0; i < 1600; i++) {
+//     let div = document.querySelector(`[data-id="${i}"]`);
+//     if (div) {
+//       div.addEventListener('click', () => {
+//         div.style.backgroundColor = myColor; //ändra till spelarens färg
+//         div.style.borderRadius = '50%';
 
-        //socket.emit('shoot', { position: i, color: myColor });
-        // socket.emit('shoot', { x: i % 40, y: Math.floor(i / 40), color: myColor, playerName: username });
-        console.log('COLORED main.js line 118');
-      });
-    }
-  }
-});
+//         //socket.emit('shoot', { position: i, color: myColor });
+//         // socket.emit('shoot', { x: i % 40, y: Math.floor(i / 40), color: myColor, playerName: username });
+//         console.log('COLORED main.js line 118');
+//       });
+//     }
+//   }
+// });
 
 //=================================================
 //================   CHAT ROOM   ==================
 //=================================================
 socket.on('username', (username) => {
   myName = username;
+  localStorage.setItem('MyName', myName);
 });
 
 // Send message by pressing ENTER on keyboard
