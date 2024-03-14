@@ -95,6 +95,8 @@ function createAndPlaceShips() {
       const shipPosition = {
         name: ship.name,
         positions: [],
+        isHit: Array.from({ length: randomDirection.length }, () => false),
+        isSunk: false,
       };
       for (let i = 0; i < randomDirection.length; i++) {
         const nextX = startX + (randomDirection[i] % width);

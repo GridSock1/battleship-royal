@@ -40,10 +40,10 @@ let availableColors = [
   '#ff8308',
   '#ff0077',
   '#00e5ff',
-  '#b300ff',
+  '#b360ff',
   '#84ab35',
   '#b07f6d',
-  '#c406d1',
+  '#c446d1',
   '#adadad',
 ];
 let assignedColors = [];
@@ -158,19 +158,48 @@ io.on('connection', (socket) => {
 
     for (const player of playersList) {
       for (const ship of player.shipPositions) {
-        for (const shipPosition of ship.positions) {
-          console.log(shipPosition, 'APP line 174');
+        for (let i = 0; i < ship.positions.length; i++) {
+          const shipPosition = ship.positions[i];
           if (shipPosition[0] === y && shipPosition[1] === x) {
             hit = true;
+            ship.isHit[i] = true;
             const shipName = ship.name;
             const ownerName = player.name;
-            playerPoints[name] += 10;
-            io.emit(
-              'chat',
-              `${name} träffade ${shipName} som tillhör ${ownerName} och har nu ${playerPoints[name]} poäng!`,
-              console.log('Player app.js line 168', color),
-              botName
-            );
+
+            if (ship.isHit.every((pos) => pos)) {
+              ship.isSunk = true;
+              if (name === ownerName) {
+                playerPoints[name] -= 20;
+                io.emit(
+                  'chat',
+                  `${name} sänkte sin egen ${shipName} och har nu ${playerPoints[name]}!`,
+                  botName
+                );
+              } else {
+                playerPoints[name] += 20;
+                io.emit(
+                  'chat',
+                  `${name} sänkte ${ownerName}s ${shipName} och har nu ${playerPoints[name]}!`,
+                  botName
+                );
+              }
+            } else {
+              if (name === ownerName) {
+                playerPoints[name] -= 10;
+                io.emit(
+                  'chat',
+                  `${name} träffade sin egen ${shipName} och har nu ${playerPoints[name]}!`,
+                  botName
+                );
+              } else {
+                playerPoints[name] += 10;
+                io.emit(
+                  'chat',
+                  `${name} träffade ${ownerName}s ${shipName} och har nu ${playerPoints[name]}!`,
+                  botName
+                );
+              }
+            }
 
             io.emit('updatePlayerPoints', {
               playerName: name,

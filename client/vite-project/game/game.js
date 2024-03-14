@@ -45,10 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
         square.dataset.y = y;
 
         square.dataset.id = x * width + y;
-        square.addEventListener('click', () => {
+        square.addEventListener('click', function shootHandler() {
           const clickedX = parseInt(square.dataset.x);
           const clickedY = parseInt(square.dataset.y);
-          console.log('CLICK AT POSITION', clickedX, clickedY);
           socket.emit('shoot', {
             x: clickedX,
             y: clickedY,
@@ -56,6 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
             color: localStorage.getItem('MyColor'),
             name: localStorage.getItem('MyName'),
           });
+
+          square.removeEventListener('click', shootHandler);
         });
         grid.appendChild(square);
         squares.push(square);

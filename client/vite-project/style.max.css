@@ -58,8 +58,8 @@
   display: flex;
 }
 .battle-page .container .grid-display {
-  width: 660px;
-  height: 660px;
+  width: 41.25rem;
+  height: 41.25rem;
   display: grid;
   grid-template-columns: repeat(30, 1fr);
   margin: 20px;
@@ -67,8 +67,8 @@
 .battle-page .container .grid-display .grid,
 .battle-page .container .grid-display div {
   background-color: rgb(0, 136, 255);
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
   border: 1px solid;
 }
 .battle-page .container .grid-display .taken {
