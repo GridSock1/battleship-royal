@@ -237,7 +237,11 @@ io.on('connection', (socket) => {
             const allSunk = player.shipPositions.every((ship) => ship.isSunk);
             if (allSunk && !playersLost.includes(player.name)) {
               playersLost.push(player.name);
-              io.emit('chat', `${name} förlorade alla sina skepp!`, botName);
+              io.emit(
+                'chat',
+                `${name} sköt sönder ${player.name}s sista skepp!`,
+                botName
+              );
             }
             break;
           }
