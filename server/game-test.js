@@ -23,7 +23,7 @@ const shipsArray = [
     ],
   },
   {
-    name: 'Jannes Yacht',
+    name: 'Jannesyacht',
     directions: [
       [0, 1, 2, 3, 4],
       [0, width, width * 2, width * 3, width * 4],
