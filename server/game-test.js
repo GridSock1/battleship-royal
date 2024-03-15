@@ -2,28 +2,28 @@ const width = 30;
 
 const shipsArray = [
   {
-    name: 'rowboat',
+    name: 'roddbåt',
     directions: [
       [0, 1],
       [0, width],
     ],
   },
   {
-    name: 'sailboat',
+    name: 'segelbåt',
     directions: [
       [0, 1, 2],
       [0, width, width * 2],
     ],
   },
   {
-    name: 'fishingboat',
+    name: 'fiskebåt',
     directions: [
       [0, 1, 2, 3],
       [0, width, width * 2, width * 3],
     ],
   },
   {
-    name: 'pirateship',
+    name: 'Jannes Yacht',
     directions: [
       [0, 1, 2, 3, 4],
       [0, width, width * 2, width * 3, width * 4],

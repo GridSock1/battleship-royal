@@ -24,18 +24,18 @@ export function drawShips(shipPositions, color) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const forbiddenShipsArray = [
-    {
-      name: 'rubberduck',
-      directions: [[0]],
-      className: 'rubberduck-container',
-    },
-    {
-      name: 'grandpawithkid',
-      directions: [[0]],
-      className: 'grandpakid-container',
-    },
-  ];
+  // const forbiddenShipsArray = [
+  //   {
+  //     name: 'rubberduck',
+  //     directions: [[0]],
+  //     className: 'rubberduck-container',
+  //   },
+  //   {
+  //     name: 'grandpawithkid',
+  //     directions: [[0]],
+  //     className: 'grandpakid-container',
+  //   },
+  // ];
 
   socket.on('squareId', (squareId) => {
     console.log('Received squareId:', squareId);

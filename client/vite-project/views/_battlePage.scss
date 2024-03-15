@@ -38,8 +38,8 @@
 
   .grid-user {
     width: 420px;
-    //height: 420px;
-    //margin: 20px;
+    height: 420px;
+    margin: 20px;
     background-color: rgb(69, 230, 230);
     display: flex;
     justify-content: center;
@@ -51,6 +51,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding-left: 10px;
       padding-right: 10px;
+      line-height: 1;
     }
 
     .ready-btn {
