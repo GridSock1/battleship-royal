@@ -109,6 +109,47 @@ socket.on('colorChanged', (colorData, hit) => {
   }
 });
 
+socket.on('PlayerPoints', (playerPoints) => {
+  // let points = document.getElementById('pointsContainer');
+  // let ul = document.createElement('ul');
+  // let li = document.createElement('li');
+  // li.textContent = playerPoints;
+  // ul.appendChild(li);
+
+  // points.appendChild(ul);
+  /*  const playerNames = Object.keys(playerPoints);
+  const playerScore = Object.values(playerPoints);
+
+  console.log('Player Names:');
+  playerNames.forEach((name, score) => console.log(name, score));
+  console.log('Player Scores:');
+  playerScore.forEach((score) => console.log(score));
+
+  for (const player in playerPoints) {
+    console.log('Player: ', player, 'Score', playerPoints);
+  }
+}); */
+
+  socket.on('PlayerPoints', (playerPoints) => {
+    console.log(playerPoints);
+
+    let pointsContainer = document.getElementById('pointsContainer');
+
+    pointsContainer.innerHTML = '';
+
+    //  let ul = document.createElement('ul');
+    for (let playerName in playerPoints) {
+      let playerScore = playerPoints[playerName];
+      localStorage.setItem('Points', playerScore);
+
+      //let li = document.createElement('li');
+      //li.textContent = `${playerName}: ${playerScore}`;
+      //ul.appendChild(li);
+    }
+    //pointsContainer.appendChild(ul);
+  });
+});
+
 // document.addEventListener('DOMContentLoaded', () => {
 //   for (let i = 0; i < 1600; i++) {
 //     let div = document.querySelector(`[data-id="${i}"]`);
@@ -159,7 +200,6 @@ function sendChatMessage() {
 sendBtn.addEventListener('click', sendChatMessage);
 
 socket.on('chat', (arg, sender, color) => {
-  console.log('main.js - socket', arg);
   updateChat(arg, sender, color, 'received');
 });
 
