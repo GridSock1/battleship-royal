@@ -29,6 +29,11 @@ mongoose
     console.error('Error connecting to MongoDB:', error);
   });
 
+const playerPointsSchema = new mongoose.Schema({
+  name: String,
+  points: Number,
+});
+
 const botName = 'QuackBot';
 let playersList = [];
 const playerPoints = {};
@@ -153,8 +158,9 @@ io.on('connection', (socket) => {
 
   const clickedSquares = new Set();
   let playersLost = [];
+  const PlayerPoints = mongoose.model('PlayerPoints', playerPointsSchema);
 
-  socket.on('shoot', ({ x, y, id, color, name }) => {
+  socket.on('shoot', async ({ x, y, id, color, name }) => {
     if (hasPlayerLost(name)) {
       socket.emit('invalidShot');
       return;
@@ -248,6 +254,21 @@ io.on('connection', (socket) => {
         if (hit) break;
       }
       if (hit) break;
+    }
+
+    try {
+      let playerPointsRecord = await PlayerPoints.findOne({ name });
+      if (!playerPointsRecord) {
+        playerPointsRecord = new PlayerPoints({
+          name,
+          points: playerPoints[name],
+        });
+      } else {
+        playerPointsRecord.points = playerPoints[name];
+      }
+      await playerPointsRecord.save();
+    } catch (error) {
+      console.error('Error saving player points:', error);
     }
 
     io.emit('colorChanged', colorData, hit);
