@@ -17,6 +17,7 @@ const { userJoin, currentUser, userLeave } = require('./users.js');
 const { createAndPlaceShips } = require('./game-test.js');
 
 const Message = require('./models/messageModel.js');
+const Player = require('./models/playerModel.js');
 
 mongoose
   .connect(
@@ -33,6 +34,29 @@ const playerPointsSchema = new mongoose.Schema({
   name: String,
   points: Number,
 });
+
+const PlayerPoints = mongoose.model('PlayerPoints', playerPointsSchema);
+
+// app.get('/api/playerPoints', async (req, res) => {
+//   try {
+//     const playerPoints = await PlayerPoints.find({}, 'name points');
+//     res.json(playerPoints);
+//   } catch (error) {
+//     console.error('Error fetching player points:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+// io.on('connection', (socket) => {
+//   socket.on('fetchPlayerPoints', async () => {
+//     try {
+//       const playerPoints = await PlayerPoints.find({}, 'name points');
+//       socket.emit('playerPoints', playerPoints);
+//     } catch (error) {
+//       console.error('Error fetching player points:', error);
+//     }
+//   });
+// });
 
 const botName = 'QuackBot';
 let playersList = [];
@@ -69,20 +93,15 @@ function generateColor() {
 io.on('connection', (socket) => {
   console.log('A user connected', socket.id);
 
-  //players[socket.id] = { ready: false };
-
   socket.on('login', ({ username }) => {
     const color = generateColor();
 
     const user = userJoin(socket.id, username, color);
     playerPoints[user.name] = 0;
     socket.join(user.id);
-    console.log('username', user.name);
 
-    // createAndPlaceShips(user);
     const shipPositions = createAndPlaceShips(userSquares);
     user.addShipPositions(shipPositions);
-    console.log('user, app: line 196', user);
 
     socket.emit('playerSetup', {
       username: user.name,
@@ -131,10 +150,7 @@ io.on('connection', (socket) => {
     const { playerId, position } = positions;
 
     if (position && Array.isArray(position)) {
-      // console.log('Placerade båtar för spelarID:');
-      position.forEach((ship, index) => {
-        // console.log(`Båt ${index + 1} position:`, ship.positions);
-      });
+      position.forEach((ship, index) => {});
     }
     io.emit('updateShipPositions', { playerId, position });
   });
@@ -265,17 +281,16 @@ io.on('connection', (socket) => {
         });
       } else {
         playerPointsRecord.points = playerPoints[name];
+        console.log('PlayerPoints:', playerPointsRecord);
       }
       await playerPointsRecord.save();
+      io.emit('PlayerPoints', playerPoints);
     } catch (error) {
       console.error('Error saving player points:', error);
     }
 
     io.emit('colorChanged', colorData, hit);
     io.emit('squareId', id);
-    io.emit('PlayerPoints', playerPoints);
-
-    console.log('PlayerPoints:', playerPoints);
   });
 
   function hasPlayerLost(playerName) {
@@ -287,6 +302,16 @@ io.on('connection', (socket) => {
     'Välkommen till chatten! Kom ihåg att alltid skriva snälla saker. :)',
     botName
   );
+
+  socket.on('fetchChatHistory', async () => {
+    try {
+      const allMessages = await Message.find();
+      const messagesJSON = JSON.stringify(allMessages);
+      socket.emit('chatHistory', messagesJSON);
+    } catch (error) {
+      console.error('Error fetching chat history:', error);
+    }
+  });
 
   socket.on('chat', async (arg) => {
     console.log('incoming chat', arg);
@@ -300,7 +325,6 @@ io.on('connection', (socket) => {
 
       await newMessage.save();
       console.log('Message saved to the database:', newMessage);
-      // io.emit('chat', arg);
 
       socket.broadcast.emit('chat', arg.message, arg.sender, arg.color);
     } catch (error) {

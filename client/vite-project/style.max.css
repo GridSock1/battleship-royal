@@ -1,9 +1,9 @@
 .join-container {
-  border: 2px solid blue;
   height: auto;
   display: flex;
   justify-content: space-between;
   padding: 0.5rem;
+  background-color: azure;
 }
 .join-container .login-form {
   display: flex;
@@ -52,7 +52,8 @@
   display: flex;
   justify-content: flex-end;
   height: 86svh;
-  border: 2px solid orange;
+  border: 2px solid #c4c4c4;
+  background-color: rgb(142, 210, 255);
 }
 .battle-page .container {
   display: flex;
@@ -84,14 +85,27 @@
 }
 .battle-page .grid-user {
   width: 420px;
-  height: 420px;
+  min-height: 420px;
   margin: 20px;
-  background-color: rgb(69, 230, 230);
+  border: 2px solid #c4c4c4;
+  background-color: rgb(186, 255, 255);
   display: flex;
   justify-content: center;
   padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   flex-direction: column;
   align-items: center;
+  border-radius: 10px;
+  /* .ready-btn {
+    width: 200px;
+    height: 40px;
+    background-color: #fbff00;
+
+    &:hover {
+      background-color: #c49701;
+    }
+  } */
 }
 .battle-page .grid-user > p {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -99,13 +113,15 @@
   padding-right: 10px;
   line-height: 1;
 }
-.battle-page .grid-user .ready-btn {
-  width: 200px;
-  height: 40px;
-  background-color: #fbff00;
-}
-.battle-page .grid-user .ready-btn:hover {
-  background-color: #c49701;
+.battle-page .grid-user .points-container-container {
+  border: 2px solid #c4c4c4;
+  background-color: rgb(236, 254, 255);
+  width: 400px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .battle-page .grid-user .rowboat-container {
   width: 80px;
@@ -217,12 +233,12 @@
   height: 30px;
   border-radius: 20px;
   border-style: none;
-  background-color: #ecd0ff;
+  background-color: #d1d0ff;
   cursor: pointer;
   font-size: 16px;
 }
 .btn:hover {
-  background-color: #b98adf;
+  background-color: #a9a8dd;
 }
 
 .chat-container {
@@ -312,10 +328,10 @@ li {
   height: 30px;
   border-radius: 20px;
   border-style: none;
-  background-color: #ecd0ff;
+  background-color: #d1d0ff;
   cursor: pointer;
   font-size: 16px;
 }
 .btn:hover {
-  background-color: #b98adf;
+  background-color: #a9a8dd;
 }/*# sourceMappingURL=style.max.css.map */

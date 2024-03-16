@@ -1,9 +1,10 @@
 .join-container {
-  border: 2px solid blue;
+  //  border: 2px solid blue;
   height: auto;
   display: flex;
   justify-content: space-between;
   padding: 0.5rem;
+  background-color: azure;
 
   .login-form {
     display: flex;

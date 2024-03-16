@@ -4,6 +4,7 @@ const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
 //import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 import { drawShips } from './game/game.js';
+import mongoose from 'mongoose';
 
 //================================================
 //==================   GLOBAL   ==================
@@ -22,6 +23,8 @@ let chatList = document.getElementById('chatList');
 let myName;
 // --- user color ---
 let myColor = 'pink';
+
+let playersList;
 
 socket.on('color', (color) => {
   myColor = color;
@@ -45,7 +48,8 @@ function addPlayer() {
   socket.emit('login', { username });
 }
 
-socket.on('usersConnected', (playersList) => {
+socket.on('usersConnected', (receivedPlayersList) => {
+  playersList = receivedPlayersList;
   usersList.innerHTML = '';
 
   playersList.forEach((player) => {
@@ -110,60 +114,32 @@ socket.on('colorChanged', (colorData, hit) => {
 });
 
 socket.on('PlayerPoints', (playerPoints) => {
-  // let points = document.getElementById('pointsContainer');
-  // let ul = document.createElement('ul');
-  // let li = document.createElement('li');
-  // li.textContent = playerPoints;
-  // ul.appendChild(li);
+  console.log('playerpoints', playerPoints);
 
-  // points.appendChild(ul);
-  /*  const playerNames = Object.keys(playerPoints);
-  const playerScore = Object.values(playerPoints);
+  let pointsContainer = document.getElementById('pointsContainer');
+  pointsContainer.innerHTML = '';
 
-  console.log('Player Names:');
-  playerNames.forEach((name, score) => console.log(name, score));
-  console.log('Player Scores:');
-  playerScore.forEach((score) => console.log(score));
-
-  for (const player in playerPoints) {
-    console.log('Player: ', player, 'Score', playerPoints);
-  }
-}); */
-
-  socket.on('PlayerPoints', (playerPoints) => {
-    console.log(playerPoints);
-
-    let pointsContainer = document.getElementById('pointsContainer');
-
-    pointsContainer.innerHTML = '';
-
-    //  let ul = document.createElement('ul');
-    for (let playerName in playerPoints) {
-      let playerScore = playerPoints[playerName];
-      localStorage.setItem('Points', playerScore);
-
-      //let li = document.createElement('li');
-      //li.textContent = `${playerName}: ${playerScore}`;
-      //ul.appendChild(li);
+  // Iterate through each player in the playersList and display their points if available
+  playersList.forEach((player) => {
+    if (playerPoints[player.name] !== undefined) {
+      const listItem = document.createElement('li');
+      listItem.textContent = `${player.name}: ${playerPoints[player.name]}`;
+      pointsContainer.appendChild(listItem); // Append the list item to the points container
     }
-    //pointsContainer.appendChild(ul);
   });
 });
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   for (let i = 0; i < 1600; i++) {
-//     let div = document.querySelector(`[data-id="${i}"]`);
-//     if (div) {
-//       div.addEventListener('click', () => {
-//         div.style.backgroundColor = myColor; //ändra till spelarens färg
-//         div.style.borderRadius = '50%';
+// socket.on('PlayerPoints', (playerPoints) => {
+//   console.log('playerpoints', playerPoints);
 
-//         //socket.emit('shoot', { position: i, color: myColor });
-//         // socket.emit('shoot', { x: i % 40, y: Math.floor(i / 40), color: myColor, playerName: username });
-//         console.log('COLORED main.js line 118');
-//       });
-//     }
-//   }
+//   let pointsContainer = document.getElementById('pointsContainer');
+//   pointsContainer.innerHTML = '';
+
+//   Object.keys(playerPoints).forEach((playerName) => {
+//     const listItem = document.createElement('li');
+//     listItem.textContent = `${playerName}: ${playerPoints[playerName]}`;
+//     pointsContainer.appendChild(listItem); // Append the list item to the points container
+//   });
 // });
 
 //=================================================
@@ -174,7 +150,6 @@ socket.on('username', (username) => {
   localStorage.setItem('MyName', myName);
 });
 
-// Send message by pressing ENTER on keyboard
 sendMessage.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
     event.preventDefault();
@@ -182,6 +157,23 @@ sendMessage.addEventListener('keypress', (event) => {
   }
 });
 
+function fetchChatHistory() {
+  socket.emit('fetchChatHistory');
+}
+
+window.addEventListener('load', fetchChatHistory);
+
+socket.on('chatHistory', (messagesJSON) => {
+  const messages = JSON.parse(messagesJSON);
+  messages.forEach((message) => {
+    updateChat(
+      message.content,
+      message.userName,
+      message.userColor,
+      'received'
+    );
+  });
+});
 // Function to send chat message
 function sendChatMessage() {
   let messageObject = {
@@ -203,7 +195,7 @@ socket.on('chat', (arg, sender, color) => {
   updateChat(arg, sender, color, 'received');
 });
 
-function updateChat(chat, sender, color) {
+function updateChat(chat, sender, color, messageType) {
   let li = document.createElement('li');
   li.innerText = chat;
   let div = document.createElement('div');

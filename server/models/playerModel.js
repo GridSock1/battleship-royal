@@ -8,6 +8,10 @@ var playerSchema = new mongoose.Schema({
     unique: true,
     index: true,
   },
+  points: {
+    type: Number,
+    default: 0,
+  },
 });
 
 //Export the model
