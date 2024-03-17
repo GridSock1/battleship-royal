@@ -1,7 +1,6 @@
 import { io } from 'socket.io-client';
 const socket = io('https://goldfish-app-e6acm.ondigitalocean.app');
 // const socket = io('http://localhost:3032');
-//import getRandomColor from './modules/randomColor.mjs';
 import './game/game.js';
 import { drawShips } from './game/game.js';
 import mongoose from 'mongoose';
@@ -86,14 +85,6 @@ ships.forEach((ship) => {
 //=================================================
 //==========   ATTACKING BATTLEGROUND   ===========      in progress
 //=================================================
-/* socket.on('otherPlayersSetup', (otherPlayersInfo) => {
-  // placera ut alla andras båtar på planen
-  otherPlayersInfo.forEach(playerInfo => {
-    placeOtherPlayerShips(playerInfo.ships, playerInfo.color);
-  });
-}); */
-
-//==========================
 
 socket.on('colorChanged', (colorData, hit) => {
   console.log('COLORCHANGE main.js line 99');
@@ -119,28 +110,39 @@ socket.on('PlayerPoints', (playerPoints) => {
   let pointsContainer = document.getElementById('pointsContainer');
   pointsContainer.innerHTML = '';
 
-  // Iterate through each player in the playersList and display their points if available
   playersList.forEach((player) => {
     if (playerPoints[player.name] !== undefined) {
       const listItem = document.createElement('li');
+
       listItem.textContent = `${player.name}: ${playerPoints[player.name]}`;
-      pointsContainer.appendChild(listItem); // Append the list item to the points container
+
+      pointsContainer.appendChild(listItem);
     }
   });
 });
 
-// socket.on('PlayerPoints', (playerPoints) => {
-//   console.log('playerpoints', playerPoints);
+socket.on('playersOut', (playersLost) => {
+  const playersOutListDiv = document.getElementById('playersOutList');
 
-//   let pointsContainer = document.getElementById('pointsContainer');
-//   pointsContainer.innerHTML = '';
+  playersLost.forEach((playerName) => {
+    const playerItem = document.createElement('p');
+    playerItem.textContent = `${playerName} is out!`;
+    playersOutListDiv.appendChild(playerItem);
+  });
+});
 
-//   Object.keys(playerPoints).forEach((playerName) => {
-//     const listItem = document.createElement('li');
-//     listItem.textContent = `${playerName}: ${playerPoints[playerName]}`;
-//     pointsContainer.appendChild(listItem); // Append the list item to the points container
-//   });
-// });
+socket.on('winner', (winnerName) => {
+  const winner = playersList.find((player) => player.name === winnerName);
+
+  if (winner) {
+    const winnerElement = document.getElementById('winner');
+
+    const winnerHeader = document.createElement('h3');
+    winnerHeader.textContent = `${winner.name} is the winner!`;
+
+    winnerElement.appendChild(winnerHeader);
+  }
+});
 
 //=================================================
 //================   CHAT ROOM   ==================
@@ -174,7 +176,6 @@ socket.on('chatHistory', (messagesJSON) => {
     );
   });
 });
-// Function to send chat message
 function sendChatMessage() {
   let messageObject = {
     message: sendMessage.value,
@@ -188,7 +189,6 @@ function sendChatMessage() {
   sendMessage.value = '';
 }
 
-// Send message by clicking sendBtn
 sendBtn.addEventListener('click', sendChatMessage);
 
 socket.on('chat', (arg, sender, color) => {

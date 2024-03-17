@@ -13,7 +13,12 @@ const io = require('socket.io')(server, {
   },
 });
 
-const { userJoin, currentUser, userLeave } = require('./users.js');
+const {
+  userJoin,
+  currentUser,
+  userLeave,
+  saveUserToMongoDB,
+} = require('./users.js');
 const { createAndPlaceShips } = require('./game-test.js');
 
 const Message = require('./models/messageModel.js');
@@ -21,7 +26,7 @@ const Player = require('./models/playerModel.js');
 
 mongoose
   .connect(
-    'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_live?retryWrites=true&w=majority&appName=Cluster0'
+    'mongodb+srv://jarileminaho:PMc7xtzaX4yXKJM1@cluster0.rf4p1sc.mongodb.net/battleship_live_3?retryWrites=true&w=majority&appName=Cluster0'
   )
   .then(() => {
     console.log('Connected to MongoDB from server');
@@ -34,29 +39,6 @@ const playerPointsSchema = new mongoose.Schema({
   name: String,
   points: Number,
 });
-
-const PlayerPoints = mongoose.model('PlayerPoints', playerPointsSchema);
-
-// app.get('/api/playerPoints', async (req, res) => {
-//   try {
-//     const playerPoints = await PlayerPoints.find({}, 'name points');
-//     res.json(playerPoints);
-//   } catch (error) {
-//     console.error('Error fetching player points:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
-// io.on('connection', (socket) => {
-//   socket.on('fetchPlayerPoints', async () => {
-//     try {
-//       const playerPoints = await PlayerPoints.find({}, 'name points');
-//       socket.emit('playerPoints', playerPoints);
-//     } catch (error) {
-//       console.error('Error fetching player points:', error);
-//     }
-//   });
-// });
 
 const botName = 'QuackBot';
 let playersList = [];
@@ -91,8 +73,6 @@ function generateColor() {
 }
 
 io.on('connection', (socket) => {
-  console.log('A user connected', socket.id);
-
   socket.on('login', ({ username }) => {
     const color = generateColor();
 
@@ -102,6 +82,8 @@ io.on('connection', (socket) => {
 
     const shipPositions = createAndPlaceShips(userSquares);
     user.addShipPositions(shipPositions);
+
+    saveUserToMongoDB(user);
 
     socket.emit('playerSetup', {
       username: user.name,
@@ -137,12 +119,11 @@ io.on('connection', (socket) => {
   }
 
   function startGame() {
-    console.log('Spelet startar...');
+    console.log('Game is starting...');
 
-    for (const player of allPlayerShips) {
+    for (const player of playersList) {
       const shipPositions = createAndPlaceShips();
-
-      io.to(player.id).emit('placeShips', { playerId, shipPositions });
+      io.to(player.id).emit('placeShips', shipPositions);
     }
   }
 
@@ -258,11 +239,21 @@ io.on('connection', (socket) => {
             const allSunk = player.shipPositions.every((ship) => ship.isSunk);
             if (allSunk && !playersLost.includes(player.name)) {
               playersLost.push(player.name);
+              console.log('PLAYERLIST AFTER SHIPS LOST', playersList);
               io.emit(
                 'chat',
                 `${name} sköt sönder ${player.name}s sista skepp!`,
                 botName
               );
+
+              io.emit('playersOut', playersLost);
+
+              playersList = playersList.filter((p) => p.name !== player.name);
+
+              if (playersList.length === 1) {
+                const remainingPlayer = playersList[0];
+                io.emit('winner', remainingPlayer.name);
+              }
             }
             break;
           }
