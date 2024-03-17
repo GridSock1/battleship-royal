@@ -204,14 +204,14 @@ io.on('connection', (socket) => {
                 playerPoints[name] -= 20;
                 io.emit(
                   'chat',
-                  `${name} sänkte sin egen ${shipName} och har nu ${playerPoints[name]}!`,
+                  `${name} sänkte sin egen ${shipName}!`,
                   botName
                 );
               } else {
                 playerPoints[name] += 20;
                 io.emit(
                   'chat',
-                  `${name} sänkte ${ownerName}s ${shipName} och har nu ${playerPoints[name]}!`,
+                  `${name} sänkte ${ownerName}s ${shipName}!`,
                   botName
                 );
               }
@@ -224,14 +224,14 @@ io.on('connection', (socket) => {
                 playerPoints[name] -= 10;
                 io.emit(
                   'chat',
-                  `${name} träffade sin egen ${shipName} och har nu ${playerPoints[name]}!`,
+                  `${name} träffade sin egen ${shipName}!`,
                   botName
                 );
               } else {
                 playerPoints[name] += 10;
                 io.emit(
                   'chat',
-                  `${name} träffade ${ownerName}s ${shipName} och har nu ${playerPoints[name]}!`,
+                  `${name} träffade ${ownerName}s ${shipName}!`,
                   botName
                 );
               }
